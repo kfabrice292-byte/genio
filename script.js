@@ -223,9 +223,19 @@ function initAdmin() {
                     status: 'OPEN',
                     date: new Date()
                 });
-            }).then(function() {
-                alert("✅ Évènement / Formation créé(e) !");
+            }).then(function(docRef) {
+                var baseLink = window.location.href.split('admin.html')[0];
+                var publicLink = baseLink + 'events.html?register=' + docRef.id;
+                
+                // Copy to clipboard
+                navigator.clipboard.writeText(publicLink).then(function() {
+                    alert("✅ Évènement / Formation créé(e) avec succès !\n\n🔗 Le lien promotionnel a été copié dans votre presse-papier :\n" + publicLink);
+                }).catch(function() {
+                    alert("✅ Évènement créé !\nLien : " + publicLink);
+                });
+                
                 eventForm.reset();
+                loadAdminEventsList();
             }).catch(function(err) {
                 alert("❌ Erreur : " + err.message);
             }).finally(function() {

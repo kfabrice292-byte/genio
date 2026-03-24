@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Genio Evolution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { display: flex; height: 100vh; overflow: hidden; background: #050811; }
+        .admin-sidebar {
+            width: 280px;
+            background: #071221;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; flex-direction: column;
+            padding: 3rem 0;
+        }
+        .admin-logo { padding: 0 3rem; margin-bottom: 5rem; font-family: var(--font-mono); font-weight: 700; color: var(--orange-action); }
+        .nav-group { flex: 1; }
+        .nav-item {
+            padding: 1.5rem 3rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .nav-item:hover, .nav-item.active { background: rgba(0, 202, 255, 0.05); color: var(--blue-tech); border-left: 3px solid var(--blue-tech); }
+        
+        .admin-main { flex: 1; overflow-y: auto; padding: 5rem; background: radial-gradient(circle at top right, rgba(0, 202, 255, 0.03), transparent); }
+        .admin-tab { display: none; }
+        .admin-tab.active { display: block; animation: fadeIn 0.5s ease; }
+        
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 5rem; }
+        .stat-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 3rem; border-radius: 4px; }
+        .stat-card h4 { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1rem; }
+        .stat-card .val { font-size: 3rem; font-weight: 700; color: white; }
+
+        .form-container { max-width: 800px; background: rgba(255, 255, 255, 0.02); padding: 5rem; border: 1px solid rgba(255, 255, 255, 0.05); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="js-enabled">
+    <aside class="admin-sidebar">
+        <div class="admin-logo">GENIO // MISSION</div>
+        <nav class="nav-group">
+            <div class="nav-item active" data-tab="overview">📊 VUE D'ENSEMBLE</div>
+            <div class="nav-item" data-tab="news-section">📰 ACTUALITÉS</div>
+            <div class="nav-item" data-tab="events-section">📅 ÉVÈNEMENTS</div>
+            <div class="nav-item" data-tab="leads-section">💼 LEADS & DEVIS</div>
+        </nav>
+        <div class="nav-item" onclick="window.location.href='index.html'">↩ QUITTER</div>
+    </aside>
+
+    <main class="admin-main">
+        <!-- Overview -->
+        <section id="overview" class="admin-tab active">
+            <span class="label-mono">// PERFORMANCE</span>
+            <h1 class="section-title">Tableau de <span class="text-blue">Bord</span></h1>
+            <div class="stat-grid">
+                <div class="stat-card"><h4>LEADS ACTIFS</h4><div class="val">12</div></div>
+                <div class="stat-card"><h4>NEWS PUBLIÉES</h4><div class="val">4</div></div>
+                <div class="stat-card"><h4>INSCRIPTIONS</h4><div class="val">28</div></div>
+            </div>
+            <div class="chart-box" style="height: 400px; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                <canvas id="adminStatsChart"></canvas>
+            </div>
+        </section>
+
+        <!-- News Management -->
+        <section id="news-section" class="admin-tab">
+            <span class="label-mono">// CONTENT ENGINE</span>
+            <h1 class="section-title">Gérer les <span class="text-orange">Actualités</span></h1>
+            <div class="form-container">
+                <form id="form-add-news" class="bespoke-form-v4">
+                     <div class="field-float">
+                        <label>IMAGE COUVERTURE</label>
+                        <input type="file" id="news-img-file" class="admin-input-dark" required>
+                    </div>
+                    <div class="field-float">
+                        <label>TITRE DE L'ARTICLE</label>
+                        <input type="text" placeholder="..." required>
+                    </div>
+                    <div class="field-float">
+                        <label>RÉSUMÉ (EXCERPT)</label>
+                        <textarea placeholder="..." required></textarea>
+                    </div>
+                    <div class="field-float">
+                        <label>CATÉGORIE</label>
+                        <select class="admin-input-dark">
+                            <option value="INNOVATION">INNOVATION</option>
+                            <option value="COMMUNAUTÉ">COMMUNAUTÉ</option>
+                            <option value="TECH">TECH</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">PUBLIER L'ACTUALITÉ</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Events Management Workflows -->
+        <section id="events-section" class="admin-tab">
+            <span class="label-mono">// ACADEMY & EVENTS</span>
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1rem;">
+                <button class="btn-primary" onclick="showEventAdminTab('list')" id="btn-ev-list">MES ÉVÈNEMENTS</button>
+                <button class="btn-secondary" style="color: white; border-color: rgba(255,255,255,0.2);" onclick="showEventAdminTab('create')" id="btn-ev-create">NOUVEL ÉVÈNEMENT</button>
+            </div>
+
+            <!-- List Events -->
+            <div id="admin-events-list">
+                <h1 class="section-title">Gérer les <span class="text-blue">Évènements</span></h1>
+                <div id="admin-events-grid" class="admin-grid-cards" style="display: grid; grid-template-columns: 1fr; gap: 1rem;">
+                    <p class="loading-msg">Chargement des évènements...</p>
+                </div>
+            </div>
+
+            <!-- Create Event -->
+            <div id="admin-events-create" style="display: none;">
+                <h1 class="section-title">Publier <span class="text-orange">Formation / Évènement</span></h1>
+                <div class="form-container">
+                    <form id="form-add-event" class="bespoke-form-v4">
+                        <div class="field-float">
+                            <label>IMAGE DE COUVERTURE</label>
+                            <input type="file" id="event-img-file" class="admin-input-dark" required>
+                        </div>
+                        <div class="field-float">
+                            <label>NOM DE L'ÉVÈNEMENT / FORMATION</label>
+                            <input type="text" id="event-title" placeholder="..." required>
+                        </div>
+                        <div class="grid-2-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="field-float">
+                                <label>TYPE</label>
+                                <select id="event-type" class="admin-input-dark">
+                                    <option value="ÉVÈNEMENT">ÉVÈNEMENT</option>
+                                    <option value="FORMATION">FORMATION</option>
+                                </select>
+                            </div>
+                            <div class="field-float">
+                                <label>DATE & HEURE</label>
+                                <input type="text" id="event-date-label" placeholder="Ex: 15 JUIN 2024 - 10H00" required>
+                            </div>
+                        </div>
+                        <div class="grid-2-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="field-float">
+                                <label>PRIX (FCFA ou Gratuit)</label>
+                                <input type="text" id="event-price" placeholder="Ex: Gratuit / 50000 FCFA" required>
+                            </div>
+                            <div class="field-float">
+                                <label>PLACES DISPONIBLES</label>
+                                <input type="number" id="event-capacity" placeholder="Ex: 50" required>
+                            </div>
+                        </div>
+                        <div class="field-float">
+                            <label>DESCRIPTION COMPLÈTE</label>
+                            <textarea id="event-desc" placeholder="Décrivez l'évènement..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">PUBLIER !</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Manage Single Event -->
+            <div id="admin-event-manage" style="display: none;">
+                <button class="btn-secondary" onclick="showEventAdminTab('list')" style="margin-bottom: 2rem; color: white; border-color: rgba(255,255,255,0.2);">↩ RETOUR AUX ÉVÈNEMENTS</button>
+                <div style="background: rgba(255, 255, 255, 0.02); padding: 2rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 2rem;">
+                    <span class="event-badge" id="mg-event-type" style="margin-bottom: 1rem;">...</span>
+                    <h1 class="section-title" id="mg-event-title" style="margin-bottom: 0.5rem; font-size: 2rem;">...</h1>
+                    <div style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.8rem; margin-bottom: 2rem;" id="mg-event-stats">0 Inscrits</div>
+                    
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn-secondary" onclick="downloadInscriptionsPDF()" style="background: var(--blue-tech); color: #000; border: none; font-family: var(--font-mono);">📄 EXTRAIRE LISTE PDF</button>
+                        <button class="btn-secondary" onclick="alert('Cliquez sur l\'icône Diplôme dans le tableau pour générer l\'attestation individuelle des participants Premium.')" style="background: var(--orange-action); color: #fff; border: none; font-family: var(--font-mono);">🎓 GÉNÉRER ATTESTATIONS</button>
+                    </div>
+                </div>
+
+                <div id="admin-event-inscriptions" class="admin-grid-cards">
+                    <p class="loading-msg">Sélectionnez un évènement...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leads Management -->
+        <section id="leads-section" class="admin-tab">
+            <span class="label-mono">// CRM</span>
+            <h1 class="section-title">Demandes de <span class="text-blue">Devis</span></h1>
+            <div id="admin-leads-list" class="admin-grid-cards">
+                <p class="loading-msg">Chargement des prospects...</p>
+            </div>
+        </section>
+
+        <!-- Hidden Certificate Template -->
+        <div id="hidden-cert-zone" style="display:none; position:absolute; top:-9999px;">
+            <div id="cert-template" style="width: 1056px; height: 816px; background: white; padding: 40px; position: relative; font-family: 'Space Grotesk', sans-serif; color: #050811; box-sizing: border-box;">
+                <div style="border: 2px solid #ddd; padding: 20px; height: 100%; border-radius: 4px; position: relative;">
+                    <div style="border: 4px solid #071221; padding: 40px; height: 100%; position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; border-radius: 4px;">
+                        <span style="position: absolute; top: 40px; left: 40px; font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: #071221; font-weight: 700; letter-spacing: 2px;">GENIO_GE</span>
+                        <div style="width: 80px; height: 80px; background: #ff6b00; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                            <span style="color: white; font-size: 2.5rem;">🎓</span>
+                        </div>
+                        <h1 style="font-size: 3.5rem; margin-bottom: 1rem; color: #ff6b00; letter-spacing: 2px; text-transform: uppercase;">Attestation de Succès</h1>
+                        <p style="font-size: 1.5rem; margin-bottom: 3rem; color: #5a6b7d;">Ce document certifie fièrement que</p>
+                        <h2 id="c-name" style="font-size: 4rem; text-transform: uppercase; margin-bottom: 3rem; color: #071221; border-bottom: 3px solid #00caff; padding-bottom: 1rem; width: 80%; display: inline-block;">NOM PRENOM</h2>
+                        <p style="font-size: 1.5rem; margin-bottom: 1rem; color: #5a6b7d;">a suivi et validé avec succès le programme :</p>
+                        <h3 id="c-event" style="font-size: 2.5rem; margin-bottom: 4rem; color: #071221; max-width: 900px; line-height: 1.2;">Titre de la formation</h3>
+                        
+                        <div style="display: flex; justify-content: space-between; width: 100%; padding: 0 4rem; margin-top: auto; align-items: flex-end;">
+                            <div style="text-align: left;">
+                                <p style="font-size: 1.2rem; color: #5a6b7d; margin-bottom: 0.5rem;">Fait le</p>
+                                <p style="font-weight: 700; font-size: 1.5rem;" id="c-date">.../...</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="font-size: 1.2rem; color: #5a6b7d; margin-bottom: 0.5rem;">Direction GENIO</p>
+                                <div style="width: 150px; height: 50px; border-bottom: 2px solid #050811; display: inline-block;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Watermark -->
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg); font-size: 10rem; opacity: 0.02; pointer-events: none; font-weight: 900; color: #000; z-index: 0; white-space: nowrap;">PREMIUM CERTIFIED</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

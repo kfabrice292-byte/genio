@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Évènements | Genio - Expériences Technologiques</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+</head>
+<body class="inner-page">
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="logo officiel.png" alt="Genio Logo" class="logo-img">
+            </a>
+            <div class="nav-links">
+                <a href="index.html#services" class="nav-link">Expertises</a>
+                <a href="about.html" class="nav-link">Qui sommes-nous</a>
+                <a href="events.html" class="nav-link">Évènements</a>
+                <a href="news.html" class="nav-link">News</a>
+                <a href="contact.html" class="nav-link btn-secondary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="inner-hero theme-dark">
+        <div class="container">
+            <span class="label-mono">// G-EXPERIENCE PLATFORM</span>
+            <h1 class="hero-title">ÉVÈNEMENTS & <span class="text-blue">FORMATIONS</span></h1>
+            <p class="hero-description">Boostez votre carrière avec nos bootcamps intensifs et rejoignez les évènements tech les plus influents du moment.</p>
+        </div>
+    </header>
+
+    <main>
+        <section class="events-listing">
+            <div class="container">
+                <div class="events-main">
+                    <div id="events-grid" class="event-sub-grid">
+                        <!-- Dynamic Events from Firebase -->
+                        <p class="loading-msg">Mise à jour des évènements...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="training-features" class="ticketing-showcase theme-light">
+            <div class="container grid-2">
+                <div class="showcase-content">
+                    <span class="label-mono">// ACADEMY</span>
+                    <h2>Formez-vous avec <span class="text-orange">Excellence</span></h2>
+                    <p>Genio ne se contente pas de coder, nous transmettons notre savoir-faire pour bâtir la future élite de la tech africaine.</p>
+                    <ul class="feature-checklist">
+                        <li><strong>Certifications Digitales :</strong> Validez vos compétences avec des titres reconnus par l'industrie.</li>
+                        <li><strong>Mentorat Direct :</strong> Apprenez aux côtés de nos lead engineers sur des projets réels.</li>
+                        <li><strong>Accès LMS :</strong> Une plateforme de cours asynchrones pour apprendre à votre propre rythme.</li>
+                    </ul>
+                </div>
+                <div class="showcase-visual">
+                    <div class="training-badge-visual">
+                        <div class="badge-ring"></div>
+                        <div class="badge-inner">
+                            <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                            <span>CERTIFIED<br>EXPERT</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Registration Modal -->
+    <div id="register-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('register-modal')">×</button>
+            <span class="label-mono">// TICKETING</span>
+            <h2 id="reg-event-title" style="margin: 0.5rem 0 2rem 0; font-size: 1.5rem;">Inscription</h2>
+            <form id="form-register-event" class="bespoke-form-v4">
+                <input type="hidden" id="reg-event-id">
+                <input type="hidden" id="reg-event-title-hidden">
+                <div class="field-float">
+                    <label>NOM COMPLET</label>
+                    <input type="text" id="reg-name" required placeholder="Votre nom complet">
+                </div>
+                <div class="field-float">
+                    <label>EMAIL PROFESSIONNEL</label>
+                    <input type="email" id="reg-email" required placeholder="nom@entreprise.com">
+                </div>
+                <div class="field-float" id="reg-tier-container">
+                    <label>TYPE D'ACCÈS</label>
+                    <select id="reg-tier" class="admin-input-dark" style="background:rgba(255,255,255,0.03); border:none; border-bottom:2px solid rgba(255,255,255,0.1); color:white; padding:1.2rem 0; width:100%; outline: none;" onchange="this.style.borderBottomColor = 'var(--orange-action)'">
+                        <option value="STANDARD" style="color:#050811;">Pass Standard (Gratuit, sans attestation ni ressource)</option>
+                        <option value="PREMIUM" style="color:#050811;">Pass Premium (Payant, avec attestation et ressources)</option>
+                    </select>
+                </div>
+                <div class="field-float">
+                    <label>NUMÉRO DE TÉLÉPHONE</label>
+                    <input type="tel" id="reg-phone" required placeholder="+226 ...">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">CONFIRMER L'INSCRIPTION</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ticket Download Modal -->
+    <div id="ticket-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="modal-close" onclick="closeModal('ticket-modal')">×</button>
+            <span class="label-mono">// INSCRIPTION RÉUSSIE</span>
+            <h2 style="margin: 0.5rem 0 2rem 0; font-size: 1.5rem;">Votre e-Ticket</h2>
+            
+            <div id="ticket-print-area" class="ticket-preview" style="text-align: left; margin-bottom: 2rem;">
+                <div class="ticket-head">
+                    <span class="ticket-logo">GENIO GE</span>
+                    <span class="ticket-type" id="t-type">PASS</span>
+                </div>
+                <div class="ticket-body">
+                    <div>
+                        <div class="ticket-name" id="t-name" style="color: var(--blue-dark); text-transform: uppercase;">...</div>
+                        <div style="font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-dark);" id="t-event">...</div>
+                    </div>
+                    <img src="" alt="QR" class="ticket-qr" id="t-qr" style="width: 80px; height: 80px;">
+                </div>
+                <div class="ticket-footer" id="t-id">ID: ...</div>
+            </div>
+
+            <button onclick="downloadTicket()" class="btn-primary" style="width: 100%;">TÉLÉCHARGER LE PDF</button>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; 2024 Genio. Vivez l'expérience technologique africaine.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

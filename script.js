@@ -197,17 +197,40 @@ function initAdmin() {
 
     // AUTH GUARD — Security
     auth.onAuthStateChanged(function(user) {
+        var body = document.getElementById('admin-body');
+        var loader = document.getElementById('auth-loading');
+        var loginOverlay = document.getElementById('admin-login-overlay');
+        
         if (!user) {
-            // No user is signed in, redirect to login page
-            window.location.href = 'index.html';
-        } else {
-            // Show the actual admin body
-            var body = document.getElementById('admin-body');
-            var loader = document.getElementById('auth-loading');
-            if(body) body.style.display = 'flex';
+            // Not logged in -> Show login overlay, hide main admin stuff
+            if(body) body.style.display = 'block'; // Body must be block to show children
             if(loader) loader.style.display = 'none';
+            if(loginOverlay) loginOverlay.style.display = 'flex';
+        } else {
+            // Logged in -> Show admin content, hide login/loader
+            if(body) body.style.display = 'flex'; // Sidebar + Main
+            if(loader) loader.style.display = 'none';
+            if(loginOverlay) loginOverlay.style.display = 'none';
         }
     });
+
+    // Admin Login Form Handler (for the specialized overlay)
+    var admLoginForm = document.getElementById('admin-login-form');
+    if (admloginForm) {
+        admloginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var email = document.getElementById('adm-email').value;
+            var pwd = document.getElementById('adm-password').value;
+            var btn = document.getElementById('btn-adm-login');
+            btn.textContent = "CHARGEMENT..."; btn.disabled = true;
+            
+            auth.signInWithEmailAndPassword(email, pwd)
+                .catch(function(err) { 
+                    alert("❌ Accès refusé : " + err.message); 
+                    btn.textContent = "SE CONNECTER AU PANEL"; btn.disabled = false;
+                });
+        });
+    }
 
     // Tab switching
     document.querySelectorAll('.nav-item[data-tab]').forEach(function(item) {

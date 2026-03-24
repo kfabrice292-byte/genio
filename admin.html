@@ -46,14 +46,36 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="js-enabled" id="admin-body">
-    <div id="auth-loading">
+<body class="js-enabled" id="admin-body" style="display: none;">
+    <!-- Loading overlay (always shows first) -->
+    <div id="auth-loading" style="display: flex; position: fixed; inset: 0; background: #050811; z-index: 9999; justify-content: center; align-items: center; color: white; font-family: var(--font-mono);">
         <div style="text-align: center;">
             <div class="spinner" style="margin: 0 auto 1.5rem auto;"></div>
             <p>VÉRIFICATION DE L'ACCÈS...</p>
         </div>
     </div>
-    <aside class="admin-sidebar">
+
+    <!-- Login Overlay (Visible IF NOT LOGGED IN) -->
+    <div id="admin-login-overlay" style="display: none; position: fixed; inset: 0; background: #050811; z-index: 10000; justify-content: center; align-items: center; padding: 2rem;">
+        <div class="form-container" style="max-width: 450px; width: 100%; border: 1px solid var(--blue-tech); background: #071221; padding: 3rem;">
+            <div class="label-mono" style="color: var(--blue-tech); margin-bottom: 2rem;">GENIO // SECURE_ACCESS</div>
+            <h2 style="color: white; margin-bottom: 2rem; font-size: 1.5rem;">Authentification <span class="text-blue">Admin</span></h2>
+            <form id="admin-login-form" class="bespoke-form-v4">
+                <div class="field-float">
+                    <label>IDENTIFIANT (EMAIL)</label>
+                    <input type="email" required placeholder="admin@genio.com" id="adm-email">
+                </div>
+                <div class="field-float">
+                    <label>MOT DE PASSE</label>
+                    <input type="password" required placeholder="••••••••" id="adm-password">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;" id="btn-adm-login">SE CONNECTER AU PANEL</button>
+            </form>
+            <p style="margin-top: 2rem; text-align: center;"><a href="index.html" style="color: rgba(255,255,255,0.3); font-size: 0.8rem; text-decoration: none; font-family: var(--font-mono);">↩ RETOUR AU SITE</a></p>
+        </div>
+    </div>
+
+    <aside class="admin-sidebar" id="admin-sidebar-main">
         <div class="admin-logo">GENIO // MISSION</div>
         <nav class="nav-group">
             <div class="nav-item active" data-tab="overview">📊 VUE D'ENSEMBLE</div>

@@ -193,7 +193,8 @@ function loadSingleFormationDetails() {
    6. ADMIN DASHBOARD
    ============================================ */
 function initAdmin() {
-    if (!window.location.pathname.includes('admin')) return;
+    var adminBodyCheck = document.getElementById('admin-body');
+    if (!adminBodyCheck) return;
 
     // MODIFIED AUTH GUARD — Custom Hardcoded Security (User Request)
     var checkAuth = function() {
@@ -246,7 +247,7 @@ function initAdmin() {
 
     // Load leads & admin events
     loadLeads();
-    if(window.location.pathname.includes('admin')) {
+    if (document.getElementById('admin-body')) {
         loadAdminEventsList();
     }
 
@@ -607,13 +608,14 @@ function handleLogin(e) {
     e.preventDefault();
     var email = e.target.querySelector('input[type="email"]').value;
     var pwd = e.target.querySelector('input[type="password"]').value;
-    var btn = e.target.querySelector('button[type="submit"]');
-    btn.textContent = "CONNEXION..."; btn.disabled = true;
     
-    auth.signInWithEmailAndPassword(email, pwd)
-        .then(function() { window.location.href = 'admin.html'; })
-        .catch(function() { alert("❌ Identifiants invalides"); })
-        .finally(function() { btn.textContent = "SE CONNECTER"; btn.disabled = false; });
+    // USER REQUESTED CREDENTIALS
+    if (email === "kfabrice292@gmail.com" && pwd === "@Wendemi2003") {
+        sessionStorage.setItem('genio_admin_auth', 'true');
+        window.location.href = 'admin.html';
+    } else {
+        alert("❌ Identifiants invalides");
+    }
 }
 
 function handleLogout() {

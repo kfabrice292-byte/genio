@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails Formation | Genio Evolution</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="js-enabled page-formation">
+    <nav class="navbar" id="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">GENIO GE</a>
+            <div class="nav-links">
+                <a href="index.html#solutions">// SOLUTIONS</a>
+                <a href="events.html">// FORMATIONS</a>
+                <a href="contact.html" class="nav-cta">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <main style="margin-top: 100px; padding-bottom: 5rem;">
+        <section class="container" id="formation-details">
+            <div id="loader-formation" style="text-align: center; padding: 5rem;">
+                <p>Chargement de la formation...</p>
+            </div>
+            
+            <div id="formation-content" style="display: none;">
+                <div class="grid-2" style="grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: start;">
+                    <div class="fade-up">
+                        <span class="label-mono" id="f-type">// FORMATION</span>
+                        <h1 id="f-title" style="font-size: 3.5rem; line-height: 1.1; margin: 1rem 0 2rem 0;">...</h1>
+                        <img id="f-image" src="" alt="Cover" style="width: 100%; border-radius: 4px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.05);">
+                        <div id="f-description" style="color: rgba(255,255,255,0.7); line-height: 1.8; font-size: 1.1rem; white-space: pre-wrap;">...</div>
+                    </div>
+
+                    <aside class="fade-up" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 3rem; border-radius: 4px; position: sticky; top: 120px;">
+                        <h3 class="label-mono" style="color: var(--orange-action); margin-bottom: 1.5rem;">INFORMATIONS</h3>
+                        <div style="margin-bottom: 2rem;">
+                            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem;">DATE DE DÉBUT</div>
+                            <div id="f-date" style="font-size: 1.2rem; font-weight: 700;">...</div>
+                        </div>
+                        <div style="margin-bottom: 2rem;">
+                            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.3rem;">PRIX STANDART</div>
+                            <div id="f-price" style="font-size: 1.2rem; font-weight: 700; color: var(--blue-tech);">...</div>
+                        </div>
+
+                        <!-- Premium Box -->
+                        <div id="f-premium-box" style="display: none; border: 1px dashed var(--orange-action); padding: 1.5rem; margin-bottom: 2rem; border-radius: 4px;">
+                            <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--orange-action); margin-bottom: 0.5rem;">OPTION PREMIUM</div>
+                            <div id="f-price-premium" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem;">...</div>
+                            <ul id="f-resources" style="font-size: 0.85rem; color: rgba(255,255,255,0.6); padding-left: 1rem;">
+                            </ul>
+                        </div>
+
+                        <button id="btn-main-register" class="btn-primary" style="width: 100%;">S'INSCRIRE MAINTENANT</button>
+                    </aside>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal D'Inscription (Copied from events.html) -->
+    <div id="register-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('register-modal')">×</button>
+            <span class="label-mono">// TICKETING</span>
+            <h2 id="reg-event-title" style="margin: 0.5rem 0 2rem 0; font-size: 1.5rem;">Inscription</h2>
+            <form id="form-register-event" class="bespoke-form-v4">
+                <input type="hidden" id="reg-event-id">
+                <input type="hidden" id="reg-event-title-hidden">
+                <div class="field-float">
+                    <label>NOM COMPLET</label>
+                    <input type="text" id="reg-name" required placeholder="Votre nom complet">
+                </div>
+                <div class="field-float">
+                    <label>EMAIL PROFESSIONNEL</label>
+                    <input type="email" id="reg-email" required placeholder="nom@entreprise.com">
+                </div>
+                <div class="field-float" id="reg-tier-container">
+                    <label>TYPE D'ACCÈS</label>
+                    <select id="reg-tier" class="admin-input-dark" style="background:rgba(255,255,255,0.03); border:none; border-bottom:2px solid rgba(255,255,255,0.1); color:white; padding:1.2rem 0; width:100%; outline: none;" onchange="this.style.borderBottomColor = 'var(--orange-action)'">
+                        <option value="STANDARD" style="color:#050811;">Pass Standard (Gratuit, sans attestation ni ressource)</option>
+                        <option value="PREMIUM" style="color:#050811;">Pass Premium (Payant, avec attestation et ressources)</option>
+                    </select>
+                </div>
+                <div class="field-float">
+                    <label>NUMÉRO DE TÉLÉPHONE</label>
+                    <input type="tel" id="reg-phone" required placeholder="+226 ...">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">CONFIRMER L'INSCRIPTION</button>
+            </form>
+
+            <div id="payment-instructions" style="display: none; margin-top: 1.5rem; padding: 1.5rem; background: rgba(255,107,0,0.1); border-left: 4px solid var(--orange-action); border-radius: 4px; text-align: left;">
+                <h4 style="color: var(--orange-action); margin-bottom: 0.5rem; font-family: var(--font-mono);">💸 PAIEMENT ORANGE MONEY</h4>
+                <p style="font-size: 0.9rem; line-height: 1.5; color: #fff;">
+                    Veuillez effectuer le dépôt sur le numéro suivant : <br>
+                    <strong style="font-size: 1.2rem; color: var(--orange-action);">54 35 87 47</strong> (GENIO)<br><br>
+                    Une fois le dépôt effectué, votre inscription sera validée manuellement par notre équipe sous 2h et vous recevrez votre confirmation.
+                </p>
+                <button onclick="closeModal('register-modal')" class="btn-secondary" style="width: 100%; margin-top: 1rem; border-color: rgba(255,255,255,0.2); color:white;">J'AI EFFECTUÉ LE PAIEMENT</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket Download Modal (Copied from events.html) -->
+    <div id="ticket-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="modal-close" onclick="closeModal('ticket-modal')">×</button>
+            <span class="label-mono">// INSCRIPTION RÉUSSIE</span>
+            <h2 style="margin: 0.5rem 0 2rem 0; font-size: 1.5rem;">Votre e-Ticket</h2>
+            
+            <div id="ticket-print-area" class="ticket-preview" style="text-align: left; margin-bottom: 2rem;">
+                <!-- Ticket design code omitted for brevity but should be same as standard -->
+                <div class="ticket-head"><span class="ticket-logo">GENIO GE</span><span class="ticket-type" id="t-type">PASS</span></div>
+                <div class="ticket-body">
+                    <div>
+                        <div class="ticket-name" id="t-name" style="color: var(--blue-dark); text-transform: uppercase;">...</div>
+                        <div style="font-family: var(--font-mono); font-size: 0.8rem; margin-top: 0.5rem; color: var(--text-dark);" id="t-event">...</div>
+                    </div>
+                    <img src="" alt="QR" class="ticket-qr" id="t-qr" style="width: 80px; height: 80px;">
+                </div>
+                <div class="ticket-footer" id="t-id">ID: ...</div>
+            </div>
+            <button onclick="downloadTicket()" class="btn-primary" style="width: 100%;">TÉLÉCHARGER LE PDF</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

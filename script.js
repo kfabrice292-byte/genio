@@ -104,8 +104,6 @@ function loadEvents() {
         .then(function(snap) {
             if (!snap.empty) {
                 grid.innerHTML = '';
-                var targetRegisterId = new URLSearchParams(window.location.search).get('register');
-
                 snap.forEach(function(doc) {
                     var d = doc.data();
                     if (d.status === 'CLOSED') return; // Hide closed events from the public site
@@ -124,18 +122,10 @@ function loadEvents() {
                             '<h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff;">' + d.title + '</h3>' +
                             '<div style="font-family: var(--font-mono); font-size: 0.8rem; color: ' + (isTraining ? 'var(--orange-action)' : 'var(--blue-tech)') + '; margin-bottom: 1rem;">' + (d.price || 'Gratuit') + ' • ' + (d.capacity ? (d.capacity + ' Places') : 'Places limitées') + '</div>' +
                             '<p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + d.description + '</p>' +
-                            '<button onclick="openRegisterModal(\'' + doc.id + '\',\'' + escapedTitle + '\', ' + (d.hasPremium||false) + ')" class="btn-primary" style="width: 100%;">RÉSERVER MA PLACE</button>' +
+                            '<div style="display:flex; gap:0.5rem;"><a href="formation.html?id=' + doc.id + '" class="btn-secondary" style="flex:1; border-color:white; color:white;">DÉTAILS</a>' +
+                            '<button onclick="openRegisterModal(\'' + doc.id + '\',\'' + escapedTitle + '\', ' + (d.hasPremium||false) + ')" class="btn-primary" style="flex:2.5;">S\'INSCRIRE</button></div>' +
                         '</div>' +
                     '</div>';
-
-                    // Auto-open modal if the user came from a share link
-                    if (targetRegisterId === doc.id) {
-                        setTimeout(function() {
-                            openRegisterModal(doc.id, d.title, d.hasPremium||false);
-                            var el = document.getElementById('register-modal');
-                            if(el) el.scrollIntoView({ behavior: 'smooth' });
-                        }, 800);
-                    }
                 });
             }
         })
@@ -144,11 +134,80 @@ function loadEvents() {
         });
 }
 
+function loadSingleFormationDetails() {
+    var contentZone = document.getElementById('formation-content');
+    if (!contentZone) return;
+
+    var urlParams = new URLSearchParams(window.location.search);
+    var formationId = urlParams.get('id');
+    if (!formationId) {
+        window.location.href = 'events.html';
+        return;
+    }
+
+    db.collection("events").doc(formationId).get()
+        .then(function(doc) {
+            if (!doc.exists) {
+                alert("Formation introuvable");
+                window.location.href = 'events.html';
+                return;
+            }
+            var d = doc.data();
+            var loader = document.getElementById('loader-formation');
+            if(loader) loader.style.display = 'none';
+            contentZone.style.display = 'block';
+
+            document.getElementById('f-type').textContent = "// " + d.type;
+            document.getElementById('f-title').textContent = d.title;
+            document.getElementById('f-image').src = d.image || 'https://via.placeholder.com/1200x600/00caff/ffffff?text=Formation';
+            document.getElementById('f-description').textContent = d.description;
+            document.getElementById('f-date').textContent = d.date_label || 'À déterminer';
+            document.getElementById('f-price').textContent = d.price || 'Gratuit';
+
+            if (d.hasPremium) {
+                document.getElementById('f-premium-box').style.display = 'block';
+                document.getElementById('f-price-premium').textContent = d.pricePremium ? (d.pricePremium + ' FCFA') : '--';
+                var resList = document.getElementById('f-resources');
+                resList.innerHTML = '';
+                if (d.resourcesPremium) {
+                    var resArray = d.resourcesPremium.split(',');
+                    resArray.forEach(function(r) {
+                        resList.innerHTML += '<li style="margin-bottom:0.5rem;">' + r.trim() + '</li>';
+                    });
+                }
+            }
+
+            var regBtn = document.getElementById('btn-main-register');
+            if (regBtn) {
+                regBtn.onclick = function() {
+                    openRegisterModal(doc.id, d.title.replace(/'/g, "\\'"), d.hasPremium||false);
+                };
+            }
+        })
+        .catch(function(e) {
+            console.log("Single event error:", e);
+        });
+}
+
 /* ============================================
    6. ADMIN DASHBOARD
    ============================================ */
 function initAdmin() {
     if (!window.location.pathname.includes('admin')) return;
+
+    // AUTH GUARD — Security
+    auth.onAuthStateChanged(function(user) {
+        if (!user) {
+            // No user is signed in, redirect to login page
+            window.location.href = 'index.html';
+        } else {
+            // Show the actual admin body
+            var body = document.getElementById('admin-body');
+            var loader = document.getElementById('auth-loading');
+            if(body) body.style.display = 'flex';
+            if(loader) loader.style.display = 'none';
+        }
+    });
 
     // Tab switching
     document.querySelectorAll('.nav-item[data-tab]').forEach(function(item) {
@@ -228,7 +287,7 @@ function initAdmin() {
                 });
             }).then(function(docRef) {
                 var baseLink = window.location.href.split('admin.html')[0];
-                var publicLink = baseLink + 'events.html?register=' + docRef.id;
+                var publicLink = baseLink + 'formation.html?id=' + docRef.id;
                 
                 // Copy to clipboard
                 navigator.clipboard.writeText(publicLink).then(function() {
@@ -348,13 +407,13 @@ function toggleEventStatus(eventId, currentStatus) {
 }
 
 function copyEventLink(id) {
-    // Generate events.html link, auto-selecting based on current domain layout.
+    // Generate formation.html link
     var baseLink = window.location.href.split('admin.html')[0];
-    var publicLink = baseLink + 'events.html?register=' + id;
+    var publicLink = baseLink + 'formation.html?id=' + id;
     
     // Copy to clipboard fallback properly
     navigator.clipboard.writeText(publicLink).then(function() {
-        alert("🔗 Lien direct copié ! Ce lien redirigera les utilisateurs vers le formulaire de paiement.");
+        alert("🔗 Lien vers la page de détails copié !\n" + publicLink);
     }).catch(function() {
         alert("Lien : " + publicLink);
     });
@@ -533,6 +592,13 @@ function handleLogin(e) {
         .finally(function() { btn.textContent = "SE CONNECTER"; btn.disabled = false; });
 }
 
+function handleLogout() {
+    if(!confirm("Souhaitez-vous vraiment vous déconnecter ?")) return;
+    auth.signOut().then(function() {
+        window.location.href = 'index.html';
+    });
+}
+
 function submitLead(e) {
     e.preventDefault();
     var inputs = e.target.querySelectorAll('input');
@@ -664,6 +730,7 @@ document.addEventListener('DOMContentLoaded', function() {
     showSegmentPopup();
     loadNews();
     loadEvents();
+    loadSingleFormationDetails();
     initAdmin();
 
     // Contact form

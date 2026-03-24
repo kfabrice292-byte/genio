@@ -216,7 +216,7 @@ function initAdmin() {
     checkAuth();
 
     // Admin Login Form Handler (Custom Credentials)
-    var admLoginForm = document.getElementById('admin-login-form');
+    var admloginForm = document.getElementById('admin-login-form');
     if (admloginForm) {
         admloginForm.addEventListener('submit', function(e) {
             e.preventDefault();

@@ -367,7 +367,7 @@ function manageEvent(eventId, title, type) {
                 container.innerHTML = '<p style="color:var(--text-muted);">Aucune inscription pour l\'instant.</p>';
                 return;
             }
-            container.innerHTML = '<div style="background:white; color:black; padding:2rem; border-radius:4px;" id="export-target-container"><h2 style="margin-bottom:1rem; border-bottom:2px solid var(--orange-action); padding-bottom:1rem; font-family:var(--font-mono);">' + title + ' - Participants</h2><table style="width:100%; border-collapse:collapse; text-align:left;" id="inscriptions-table"><tr style="background:#eee; font-family:var(--font-mono); font-size:0.8rem;"><th style="padding:0.8rem;">NOM</th><th style="padding:0.8rem;">EMAIL</th><th style="padding:0.8rem;">TÉLÉPHONE</th><th style="padding:0.8rem;">PASS</th><th style="padding:0.8rem;">DATE</th><th style="padding:0.8rem; text-align:center;">DIPLÔME</th></tr>';
+            container.innerHTML = '<div style="background:white; color:black; padding:2rem; border-radius:4px;" id="export-target-container"><h2 style="margin-bottom:1rem; border-bottom:2px solid var(--orange-action); padding-bottom:1rem; font-family:var(--font-mono);">' + title + ' - Participants</h2><table style="width:100%; border-collapse:collapse; text-align:left;" id="inscriptions-table"><tr style="background:#eee; font-family:var(--font-mono); font-size:0.8rem;"><th style="padding:0.8rem;">NOM</th><th style="padding:0.8rem;">EMAIL</th><th style="padding:0.8rem;">TÉLÉPHONE</th><th style="padding:0.8rem;">PASS</th><th style="padding:0.8rem;">PAIEMENT</th><th style="padding:0.8rem;">DATE</th><th style="padding:0.8rem; text-align:center;">ACTIONS</th></tr>';
             
             // Client-side sort to avoid Firebase Composite Index requirement
             var docs = [];
@@ -384,14 +384,27 @@ function manageEvent(eventId, title, type) {
                 var dateStr = d.timestamp && d.timestamp.toDate ? new Date(d.timestamp.toDate()).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' }) : '';
                 var bg = (index % 2 === 0) ? '' : 'background:#f9f9f9;';
                 var tierBadge = d.tier === 'PREMIUM' ? '<span style="background:var(--orange-action); color:white; padding:0.2rem 0.5rem; border-radius:20px; font-size:0.7rem; font-family:var(--font-mono);">PREMIUM</span>' : '<span style="background:#ddd; color:#333; padding:0.2rem 0.5rem; border-radius:20px; font-size:0.7rem; font-family:var(--font-mono);">STANDARD</span>';
-                var certAction = d.tier === 'PREMIUM' ? '<button onclick="generateUserCertificate(\'' + d.name.replace(/'/g, "\\'") + '\', \'' + title.replace(/'/g, "\\'") + '\')" style="background:var(--blue-dark); color:white; border:none; padding:0.3rem 0.6rem; cursor:pointer;" title="Générer Attestation">🎓</button>' : '-';
+                var payStatus = d.paymentStatus || 'VALIDATED';
+                var payBadge = (payStatus === 'PENDING') ? '<span style="color:#ff4444; font-size:0.75rem; font-weight:700;">EN ATTENTE</span>' : '<span style="color:#00e676; font-size:0.75rem; font-weight:700;">PAYÉ</span>';
+                var valBtn = (payStatus === 'PENDING' && d.tier === 'PREMIUM') ? '<button onclick="validatePayment(\'' + doc.id + '\')" style="background:#00e676; border:none; color:white; padding:0.3rem 0.6rem; margin-right:5px; border-radius:4px; font-size:0.7rem; cursor:pointer;" title="Valider Paiement">✅</button>' : '';
                 
-                container.querySelector('table').innerHTML += '<tr style="' + bg + '"><td style="padding:0.8rem; border-bottom:1px solid #ddd; font-weight:bold;">' + (d.name||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + (d.email||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + (d.phone||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + tierBadge + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd; font-family:var(--font-mono); font-size:0.7rem;">' + dateStr + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd; text-align:center;">' + certAction + '</td></tr>';
+                var certAction = (payStatus === 'VALIDATED' && d.tier === 'PREMIUM') ? '<button onclick="generateUserCertificate(\'' + d.name.replace(/'/g, "\\'") + '\', \'' + title.replace(/'/g, "\\'") + '\')" style="background:var(--blue-dark); color:white; border:none; padding:0.3rem 0.6rem; cursor:pointer;" title="Générer Attestation">🎓</button>' : '-';
+                
+                container.querySelector('table').innerHTML += '<tr style="' + bg + '"><td style="padding:0.8rem; border-bottom:1px solid #ddd; font-weight:bold;">' + (d.name||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + (d.email||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + (d.phone||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + tierBadge + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + payBadge + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd; font-family:var(--font-mono); font-size:0.7rem;">' + dateStr + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd; text-align:center;">' + valBtn + certAction + '</td></tr>';
                 index++;
             });
             container.innerHTML += '</table></div>';
         }).catch(function(e) {
             container.innerHTML = '<p style="color:red;">Erreur: Pensez à ajouter un Index Firestore (eventId) si l\'erreur persiste -> ' + e.message + '</p>';
+        });
+}
+
+function validatePayment(id) {
+    if (!confirm("Avez-vous bien reçu le virement pour cette inscription ?")) return;
+    db.collection("inscriptions").doc(id).update({ paymentStatus: 'VALIDATED' })
+        .then(function() { 
+            alert("✅ Inscription validée avec succès !"); 
+            manageEvent(currentManagedEventId, currentManagedEventTitle); // Refresh
         });
 }
 
@@ -522,26 +535,36 @@ function submitRegistration(e) {
         email: formEmail,
         phone: formPhone,
         tier: formTier,
+        paymentStatus: (formTier === 'PREMIUM') ? 'PENDING' : 'VALIDATED',
         timestamp: new Date()
     }).then(function(docRef) {
-        e.target.reset();
-        closeModal('register-modal');
-        
-        // Show Ticket
-        var ticketModal = document.getElementById('ticket-modal');
-        if (ticketModal) {
-            document.getElementById('t-name').textContent = formName;
-            document.getElementById('t-event').textContent = eventTitle;
-            var tTypeEl = document.getElementById('t-type');
-            if(tTypeEl) {
-                tTypeEl.textContent = 'PASS ' + formTier;
-                tTypeEl.style.background = (formTier === 'PREMIUM') ? 'var(--orange-action)' : 'var(--blue-dark)';
-            }
-            document.getElementById('t-id').textContent = 'ID: ' + docRef.id.toUpperCase();
-            document.getElementById('t-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=050811&data=' + docRef.id;
-            ticketModal.style.display = 'flex';
+        if (formTier === 'PREMIUM') {
+            // Show instructions
+            var inst = document.getElementById('payment-instructions');
+            var form = document.getElementById('form-register-event');
+            if(form) form.style.display = 'none';
+            if(inst) inst.style.display = 'block';
+            document.getElementById('reg-event-title').textContent = "Paiement en attente...";
         } else {
-            alert("✅ Inscription confirmée !");
+            e.target.reset();
+            closeModal('register-modal');
+            
+            // Show Ticket
+            var ticketModal = document.getElementById('ticket-modal');
+            if (ticketModal) {
+                document.getElementById('t-name').textContent = formName;
+                document.getElementById('t-event').textContent = eventTitle;
+                var tTypeEl = document.getElementById('t-type');
+                if(tTypeEl) {
+                    tTypeEl.textContent = 'PASS ' + formTier;
+                    tTypeEl.style.background = (formTier === 'PREMIUM') ? 'var(--orange-action)' : 'var(--blue-dark)';
+                }
+                document.getElementById('t-id').textContent = 'ID: ' + docRef.id.toUpperCase();
+                document.getElementById('t-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=050811&data=' + docRef.id;
+                ticketModal.style.display = 'flex';
+            } else {
+                alert("✅ Inscription confirmée !");
+            }
         }
     }).catch(function(err) {
         alert("❌ Erreur : " + err.message);

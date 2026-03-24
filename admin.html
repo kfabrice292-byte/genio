@@ -157,7 +157,27 @@
                             <label>DESCRIPTION COMPLÈTE</label>
                             <textarea id="event-desc" placeholder="Décrivez l'évènement..." required></textarea>
                         </div>
-                        <button type="submit" class="btn-primary">PUBLIER !</button>
+
+                        <!-- Premium Options -->
+                        <div style="margin-top: 2rem; padding: 2rem; background: rgba(255,107,0,0.05); border: 1px dashed var(--orange-action); border-radius: 4px;">
+                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
+                                <input type="checkbox" id="event-has-premium" style="width: 20px; height: 20px; cursor: pointer;">
+                                <label for="event-has-premium" style="font-family: var(--font-mono); font-weight: 700; color: var(--orange-action); cursor: pointer;">ACTIVER L'OPTION PASS PREMIUM ?</label>
+                            </div>
+                            
+                            <div id="premium-fields" style="display: none;">
+                                <div class="field-float">
+                                    <label>PRIX PREMIUM (FCFA)</label>
+                                    <input type="text" id="event-price-premium" placeholder="Ex: 50000">
+                                </div>
+                                <div class="field-float">
+                                    <label>RESSOURCES & AVANTAGES (Boutons, PDF, Attestations...)</label>
+                                    <textarea id="event-resources-premium" placeholder="Litez les avantages séparés par des virgules..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="margin-top: 2rem;">PUBLIER !</button>
                     </form>
                 </div>
             </div>

@@ -124,14 +124,14 @@ function loadEvents() {
                             '<h3 style="font-size: 1.2rem; margin-bottom: 0.5rem; color: #fff;">' + d.title + '</h3>' +
                             '<div style="font-family: var(--font-mono); font-size: 0.8rem; color: ' + (isTraining ? 'var(--orange-action)' : 'var(--blue-tech)') + '; margin-bottom: 1rem;">' + (d.price || 'Gratuit') + ' • ' + (d.capacity ? (d.capacity + ' Places') : 'Places limitées') + '</div>' +
                             '<p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + d.description + '</p>' +
-                            '<button onclick="openRegisterModal(\'' + doc.id + '\',\'' + escapedTitle + '\')" class="btn-primary" style="width: 100%;">RÉSERVER MA PLACE</button>' +
+                            '<button onclick="openRegisterModal(\'' + doc.id + '\',\'' + escapedTitle + '\', ' + (d.hasPremium||false) + ')" class="btn-primary" style="width: 100%;">RÉSERVER MA PLACE</button>' +
                         '</div>' +
                     '</div>';
 
                     // Auto-open modal if the user came from a share link
                     if (targetRegisterId === doc.id) {
                         setTimeout(function() {
-                            openRegisterModal(doc.id, d.title);
+                            openRegisterModal(doc.id, d.title, d.hasPremium||false);
                             var el = document.getElementById('register-modal');
                             if(el) el.scrollIntoView({ behavior: 'smooth' });
                         }, 800);
@@ -219,6 +219,9 @@ function initAdmin() {
                     price: document.getElementById('event-price').value,
                     capacity: document.getElementById('event-capacity').value,
                     description: document.getElementById('event-desc').value,
+                    hasPremium: document.getElementById('event-has-premium').checked,
+                    pricePremium: document.getElementById('event-price-premium').value || '',
+                    resourcesPremium: document.getElementById('event-resources-premium').value || '',
                     image: imageUrl || '',
                     status: 'OPEN',
                     date: new Date()
@@ -242,6 +245,14 @@ function initAdmin() {
                 btn.textContent = "PUBLIER";
                 btn.disabled = false;
             });
+        });
+    }
+
+    // Toggle Premium Fields Visibility
+    var premiumCheck = document.getElementById('event-has-premium');
+    if (premiumCheck) {
+        premiumCheck.addEventListener('change', function() {
+            document.getElementById('premium-fields').style.display = this.checked ? 'block' : 'none';
         });
     }
 }
@@ -505,12 +516,28 @@ function submitLead(e) {
     });
 }
 
-function openRegisterModal(eventId, eventTitle) {
+function openRegisterModal(eventId, eventTitle, hasPremium) {
     var modal = document.getElementById('register-modal');
     if (!modal) return;
+    
+    // Reset Form visibility if it was hidden by previous premium payment
+    var form = document.getElementById('form-register-event');
+    var inst = document.getElementById('payment-instructions');
+    if(form) form.style.display = 'block';
+    if(inst) inst.style.display = 'none';
+
     document.getElementById('reg-event-id').value = eventId;
     document.getElementById('reg-event-title-hidden').value = eventTitle;
     document.getElementById('reg-event-title').textContent = "Inscription : " + eventTitle;
+    
+    // Toggle Tier selection visibility
+    var tierContainer = document.getElementById('reg-tier-container');
+    if(tierContainer) {
+        tierContainer.style.display = hasPremium ? 'block' : 'none';
+        // Reset to Standard if no premium
+        if(!hasPremium) document.getElementById('reg-tier').value = 'STANDARD';
+    }
+
     modal.style.display = 'flex';
 }
 

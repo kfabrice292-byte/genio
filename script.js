@@ -195,26 +195,26 @@ function loadSingleFormationDetails() {
 function initAdmin() {
     if (!window.location.pathname.includes('admin')) return;
 
-    // AUTH GUARD — Security
-    auth.onAuthStateChanged(function(user) {
+    // MODIFIED AUTH GUARD — Custom Hardcoded Security (User Request)
+    var checkAuth = function() {
         var body = document.getElementById('admin-body');
         var loader = document.getElementById('auth-loading');
         var loginOverlay = document.getElementById('admin-login-overlay');
-        
-        if (!user) {
-            // Not logged in -> Show login overlay, hide main admin stuff
-            if(body) body.style.display = 'block'; // Body must be block to show children
+        var isAuthenticated = sessionStorage.getItem('genio_admin_auth') === 'true';
+
+        if (!isAuthenticated) {
+            if(body) body.style.display = 'block'; 
             if(loader) loader.style.display = 'none';
             if(loginOverlay) loginOverlay.style.display = 'flex';
         } else {
-            // Logged in -> Show admin content, hide login/loader
-            if(body) body.style.display = 'flex'; // Sidebar + Main
+            if(body) body.style.display = 'flex'; 
             if(loader) loader.style.display = 'none';
             if(loginOverlay) loginOverlay.style.display = 'none';
         }
-    });
+    };
+    checkAuth();
 
-    // Admin Login Form Handler (for the specialized overlay)
+    // Admin Login Form Handler (Custom Credentials)
     var admLoginForm = document.getElementById('admin-login-form');
     if (admloginForm) {
         admloginForm.addEventListener('submit', function(e) {
@@ -222,13 +222,14 @@ function initAdmin() {
             var email = document.getElementById('adm-email').value;
             var pwd = document.getElementById('adm-password').value;
             var btn = document.getElementById('btn-adm-login');
-            btn.textContent = "CHARGEMENT..."; btn.disabled = true;
             
-            auth.signInWithEmailAndPassword(email, pwd)
-                .catch(function(err) { 
-                    alert("❌ Accès refusé : " + err.message); 
-                    btn.textContent = "SE CONNECTER AU PANEL"; btn.disabled = false;
-                });
+            // USER REQUESTED CREDENTIALS
+            if (email === "kfabrice292@gmail.com" && pwd === "@Wendemi2003") {
+                sessionStorage.setItem('genio_admin_auth', 'true');
+                checkAuth();
+            } else {
+                alert("❌ Erreur d'accès : Identifiants incorrects.");
+            }
         });
     }
 
@@ -617,9 +618,8 @@ function handleLogin(e) {
 
 function handleLogout() {
     if(!confirm("Souhaitez-vous vraiment vous déconnecter ?")) return;
-    auth.signOut().then(function() {
-        window.location.href = 'index.html';
-    });
+    sessionStorage.removeItem('genio_admin_auth');
+    window.location.href = 'index.html';
 }
 
 function submitLead(e) {

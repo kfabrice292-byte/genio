@@ -209,7 +209,7 @@ function initAdmin() {
             btn.disabled = true;
 
             var fileInput = document.getElementById('event-img-file');
-            var uploadPromise = (fileInput && fileInput.files[0]) ? uploadToImgBB(fileInput.files[0]) : Promise.resolve('');
+            var uploadPromise = (fileInput && fileInput.files[0]) ? uploadToImgBB(fileInput.files[0], 3000, 3000) : Promise.resolve('');
 
             uploadPromise.then(function(imageUrl) {
                 return db.collection("events").add({
@@ -456,16 +456,55 @@ function generateUserCertificate(userName, eventName) {
 }
 
 /* ============================================
-   8. IMAGE UPLOAD (imgBB)
+   8. IMAGE UPLOAD (imgBB with high-res Resizing)
    ============================================ */
-function uploadToImgBB(file) {
+function uploadToImgBB(file, targetWidth, targetHeight) {
     if (!file) return Promise.resolve('');
-    var fd = new FormData();
-    fd.append('image', file);
-    return fetch('https://api.imgbb.com/1/upload?key=' + IMGBB_KEY, { method: 'POST', body: fd })
-        .then(function(res) { return res.json(); })
-        .then(function(data) { return data.success ? data.data.url : ''; })
-        .catch(function() { return ''; });
+    
+    var processPromise = (targetWidth && targetHeight) 
+        ? resizeImage(file, targetWidth, targetHeight) 
+        : Promise.resolve(file);
+
+    return processPromise.then(function(processedFile) {
+        var fd = new FormData();
+        fd.append('image', processedFile);
+        return fetch('https://api.imgBB.com/1/upload?key=' + IMGBB_KEY, { method: 'POST', body: fd });
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) { return data.success ? data.data.url : ''; })
+    .catch(function() { return ''; });
+}
+
+function resizeImage(file, width, height) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e) {
+            var img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                var canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                var ctx = canvas.getContext('2d');
+                ctx.fillStyle = "white";
+                ctx.fillRect(0, 0, width, height);
+
+                // Object-fit: cover logic
+                var ratio = Math.max(width / img.width, height / img.height);
+                var nw = img.width * ratio;
+                var nh = img.height * ratio;
+                var ox = (width - nw) / 2;
+                var oy = (height - nh) / 2;
+                
+                ctx.drawImage(img, ox, oy, nw, nh);
+                canvas.toBlob(function(blob) {
+                    resolve(blob);
+                }, 'image/jpeg', 0.9);
+            };
+        };
+        reader.onerror = reject;
+    });
 }
 
 /* ============================================

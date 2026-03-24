@@ -216,13 +216,12 @@ function initAdmin() {
     checkAuth();
 
     // Admin Login Form Handler (Custom Credentials)
-    var admloginForm = document.getElementById('admin-login-form');
-    if (admloginForm) {
-        admloginForm.addEventListener('submit', function(e) {
+    const loginFormRef = document.getElementById('admin-login-form');
+    if (loginFormRef) {
+        loginFormRef.addEventListener('submit', function(e) {
             e.preventDefault();
-            var email = document.getElementById('adm-email').value;
-            var pwd = document.getElementById('adm-password').value;
-            var btn = document.getElementById('btn-adm-login');
+            const email = document.getElementById('adm-email').value;
+            const pwd = document.getElementById('adm-password').value;
             
             // USER REQUESTED CREDENTIALS
             if (email === "kfabrice292@gmail.com" && pwd === "@Wendemi2003") {

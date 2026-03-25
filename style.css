@@ -1147,9 +1147,17 @@ body {
 }
 
 .ticket-logo {
-    font-weight: 900;
-    letter-spacing: 2px;
+    font-weight: 800;
 }
+
+/* Specific Formation Page Layout */
+.formation-grid-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+    align-items: start;
+}
+
 
 .ticket-type {
     font-family: var(--font-mono);
@@ -2318,14 +2326,33 @@ select {
     /* Formation Page */
     .grid-2 { 
         grid-template-columns: 1fr !important; 
-        gap: 3rem !important;
+        gap: 2.5rem !important;
+    }
+    .page-formation main {
+        padding-bottom: 2rem !important;
     }
     .page-formation aside {
         position: relative !important;
         top: 0 !important;
+        padding: 2rem 1.5rem !important;
+        order: -1; /* Option: Move registration box to top on mobile if desired, or keep at bottom */
     }
+    /* Let's keep registration box at the bottom for better reading flow but slightly style the top label */
+    .page-formation aside { order: 1; } 
+    
     .page-formation h1 {
-        font-size: 2.5rem !important;
+        font-size: 2.2rem !important;
+        margin-top: 0.5rem !important;
+    }
+    #f-image {
+        margin-bottom: 1.5rem !important;
+    }
+    #f-description {
+        font-size: 1rem !important;
+        line-height: 1.6 !important;
+    }
+    #f-premium-box {
+        margin-top: 1.5rem !important;
     }
 
     /* Admin UI */

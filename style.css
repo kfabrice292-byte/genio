@@ -2311,3 +2311,79 @@ select {
 .modal-close:hover { opacity: 1; color: var(--orange-action); }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* ============================================
+   RESPONSIVE OVERRIDES — Admin & Formations
+   ============================================ */
+@media (max-width: 991px) {
+    /* Formation Page */
+    .grid-2 { 
+        grid-template-columns: 1fr !important; 
+        gap: 3rem !important;
+    }
+    .page-formation aside {
+        position: relative !important;
+        top: 0 !important;
+    }
+    .page-formation h1 {
+        font-size: 2.5rem !important;
+    }
+
+    /* Admin UI */
+    #admin-body {
+        flex-direction: column !important;
+        height: auto !important;
+        overflow-y: auto !important;
+    }
+    .admin-sidebar {
+        width: 100% !important;
+        height: auto !important;
+        padding: 1.5rem !important;
+        border-right: none !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        position: relative !important;
+    }
+    .admin-main {
+        padding: 2rem !important;
+    }
+    .admin-logo {
+        margin-bottom: 1.5rem !important;
+    }
+    .nav-group {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 0.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+    .nav-item {
+        margin-bottom: 0 !important;
+        padding: 0.8rem 1rem !important;
+        font-size: 0.7rem !important;
+        border: 1px solid rgba(255,255,255,0.05);
+        border-radius: 4px;
+    }
+    .nav-item.active {
+        background: var(--blue-tech) !important;
+        color: white !important;
+    }
+    
+    .stats-grid, .events-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .admin-main {
+        padding: 1rem !important;
+    }
+    .admin-tab h2 {
+        font-size: 1.5rem !important;
+    }
+    .form-container {
+        padding: 2rem 1.5rem !important;
+    }
+    .ticket-preview {
+        padding: 1.5rem !important;
+        transform: scale(0.9);
+        transform-origin: left top;
+    }
+}

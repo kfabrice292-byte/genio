@@ -123,7 +123,7 @@ function loadEvents() {
                             '<div style="font-family: var(--font-mono); font-size: 0.8rem; color: ' + (isTraining ? 'var(--orange-action)' : 'var(--blue-tech)') + '; margin-bottom: 1rem;">' + (d.price || 'Gratuit') + ' • ' + (d.capacity ? (d.capacity + ' Places') : 'Places limitées') + '</div>' +
                             '<p style="color: rgba(255, 255, 255, 0.7); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">' + d.description + '</p>' +
                             '<div style="display:flex; gap:0.5rem;"><a href="formation.html?id=' + doc.id + '" class="btn-secondary" style="flex:1; border-color:white; color:white;">DÉTAILS</a>' +
-                            '<button onclick="openRegisterModal(\'' + doc.id + '\',\'' + escapedTitle + '\', ' + (d.hasPremium||false) + ')" class="btn-primary" style="flex:2.5;">S\'INSCRIRE</button></div>' +
+                            '<button onclick="openRegisterModal(\'' + doc.id + '\', \'' + escapedTitle + '\')" class="btn-primary" style="flex:2.5;">S\'INSCRIRE</button></div>' +
                         '</div>' +
                     '</div>';
                 });
@@ -180,7 +180,7 @@ function loadSingleFormationDetails() {
             var regBtn = document.getElementById('btn-main-register');
             if (regBtn) {
                 regBtn.onclick = function() {
-                    openRegisterModal(doc.id, d.title.replace(/'/g, "\\'"), d.hasPremium||false);
+                    openRegisterModal(doc.id, d.title.replace(/'/g, "\\'"));
                 };
             }
         })
@@ -477,12 +477,12 @@ function manageEvent(eventId, title, type) {
                 var d = doc.data();
                 var dateStr = d.timestamp && d.timestamp.toDate ? new Date(d.timestamp.toDate()).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute:'2-digit' }) : '';
                 var bg = (index % 2 === 0) ? '' : 'background:#f9f9f9;';
-                var tierBadge = d.tier === 'PREMIUM' ? '<span style="background:var(--orange-action); color:white; padding:0.2rem 0.5rem; border-radius:20px; font-size:0.7rem; font-family:var(--font-mono);">PREMIUM</span>' : '<span style="background:#ddd; color:#333; padding:0.2rem 0.5rem; border-radius:20px; font-size:0.7rem; font-family:var(--font-mono);">STANDARD</span>';
+                var tierBadge = '<span style="background:var(--blue-tech); color:white; padding:0.2rem 0.5rem; border-radius:20px; font-size:0.7rem; font-family:var(--font-mono);">PARTICIPANT</span>';
                 var payStatus = d.paymentStatus || 'VALIDATED';
-                var payBadge = (payStatus === 'PENDING') ? '<span style="color:#ff4444; font-size:0.75rem; font-weight:700;">EN ATTENTE</span>' : '<span style="color:#00e676; font-size:0.75rem; font-weight:700;">PAYÉ</span>';
-                var valBtn = (payStatus === 'PENDING' && d.tier === 'PREMIUM') ? '<button onclick="validatePayment(\'' + doc.id + '\')" style="background:#00e676; border:none; color:white; padding:0.3rem 0.6rem; margin-right:5px; border-radius:4px; font-size:0.7rem; cursor:pointer;" title="Valider Paiement">✅</button>' : '';
+                var payBadge = (payStatus === 'PENDING') ? '<span style="color:#ff4444; font-size:0.75rem; font-weight:700;">EN ATTENTE</span>' : '<span style="color:#00e676; font-size:0.75rem; font-weight:700;">PAYÉ / LIBÉRÉ</span>';
+                var valBtn = (payStatus === 'PENDING') ? '<button onclick="validatePayment(\'' + doc.id + '\')" style="background:#00e676; border:none; color:white; padding:0.3rem 0.6rem; margin-right:5px; border-radius:4px; font-size:0.7rem; cursor:pointer;" title="Valider Paiement">✅</button>' : '';
                 
-                var certAction = (payStatus === 'VALIDATED' && d.tier === 'PREMIUM') ? '<button onclick="generateUserCertificate(\'' + d.name.replace(/'/g, "\\'") + '\', \'' + title.replace(/'/g, "\\'") + '\')" style="background:var(--blue-dark); color:white; border:none; padding:0.3rem 0.6rem; cursor:pointer;" title="Générer Attestation">🎓</button>' : '-';
+                var certAction = (payStatus === 'VALIDATED') ? '<button onclick="generateUserCertificate(\'' + d.name.replace(/'/g, "\\'") + '\', \'' + title.replace(/'/g, "\\'") + '\')" style="background:var(--blue-dark); color:white; border:none; padding:0.3rem 0.6rem; cursor:pointer;" title="Générer Attestation">🎓</button>' : '-';
                 
                 container.querySelector('table').innerHTML += '<tr style="' + bg + '"><td style="padding:0.8rem; border-bottom:1px solid #ddd; font-weight:bold;">' + (d.name||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + (d.email||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + (d.phone||'') + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + tierBadge + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd;">' + payBadge + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd; font-family:var(--font-mono); font-size:0.7rem;">' + dateStr + '</td><td style="padding:0.8rem; border-bottom:1px solid #ddd; text-align:center;">' + valBtn + certAction + '</td></tr>';
                 index++;
@@ -645,11 +645,11 @@ function submitLead(e) {
     });
 }
 
-function openRegisterModal(eventId, eventTitle, hasPremium) {
+function openRegisterModal(eventId, eventTitle) {
     var modal = document.getElementById('register-modal');
     if (!modal) return;
     
-    // Reset Form visibility if it was hidden by previous premium payment
+    // Reset Form visibility 
     var form = document.getElementById('form-register-event');
     var inst = document.getElementById('payment-instructions');
     if(form) form.style.display = 'block';
@@ -659,14 +659,6 @@ function openRegisterModal(eventId, eventTitle, hasPremium) {
     document.getElementById('reg-event-title-hidden').value = eventTitle;
     document.getElementById('reg-event-title').textContent = "Inscription : " + eventTitle;
     
-    // Toggle Tier selection visibility
-    var tierContainer = document.getElementById('reg-tier-container');
-    if(tierContainer) {
-        tierContainer.style.display = hasPremium ? 'block' : 'none';
-        // Reset to Standard if no premium
-        if(!hasPremium) document.getElementById('reg-tier').value = 'STANDARD';
-    }
-
     modal.style.display = 'flex';
 }
 
@@ -681,47 +673,51 @@ function submitRegistration(e) {
     var formName = document.getElementById('reg-name').value;
     var formEmail = document.getElementById('reg-email').value;
     var formPhone = document.getElementById('reg-phone').value;
-    var formTierSelect = document.getElementById('reg-tier');
-    var formTier = formTierSelect ? formTierSelect.value : 'STANDARD';
 
-    db.collection("inscriptions").add({
-        eventId: eventId,
-        eventTitle: eventTitle,
-        name: formName,
-        email: formEmail,
-        phone: formPhone,
-        tier: formTier,
-        paymentStatus: (formTier === 'PREMIUM') ? 'PENDING' : 'VALIDATED',
-        timestamp: new Date()
-    }).then(function(docRef) {
-        if (formTier === 'PREMIUM') {
-            // Show instructions
-            var inst = document.getElementById('payment-instructions');
-            var form = document.getElementById('form-register-event');
-            if(form) form.style.display = 'none';
-            if(inst) inst.style.display = 'block';
-            document.getElementById('reg-event-title').textContent = "Paiement en attente...";
-        } else {
-            e.target.reset();
-            closeModal('register-modal');
-            
-            // Show Ticket
-            var ticketModal = document.getElementById('ticket-modal');
-            if (ticketModal) {
-                document.getElementById('t-name').textContent = formName;
-                document.getElementById('t-event').textContent = eventTitle;
-                var tTypeEl = document.getElementById('t-type');
-                if(tTypeEl) {
-                    tTypeEl.textContent = 'PASS ' + formTier;
-                    tTypeEl.style.background = (formTier === 'PREMIUM') ? 'var(--orange-action)' : 'var(--blue-dark)';
-                }
-                document.getElementById('t-id').textContent = 'ID: ' + docRef.id.toUpperCase();
-                document.getElementById('t-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=050811&data=' + docRef.id;
-                ticketModal.style.display = 'flex';
+    db.collection("events").doc(eventId).get().then(function(eventDoc) {
+        var eventData = eventDoc.data();
+        var isFree = (!eventDoc.exists || !eventData.price || eventData.price === '0' || eventData.price === 'Gratuit');
+        var status = isFree ? 'VALIDATED' : 'PENDING';
+
+        return db.collection("inscriptions").add({
+            eventId: eventId,
+            eventTitle: eventTitle,
+            name: formName,
+            email: formEmail,
+            phone: formPhone,
+            tier: 'PARTICIPANT',
+            paymentStatus: status,
+            timestamp: new Date()
+        }).then(function(docRef) {
+            if (status === 'PENDING') {
+                // Show instructions
+                var inst = document.getElementById('payment-instructions');
+                var form = document.getElementById('form-register-event');
+                if(form) form.style.display = 'none';
+                if(inst) inst.style.display = 'block';
+                document.getElementById('reg-event-title').textContent = "Paiement en attente...";
             } else {
-                alert("✅ Inscription confirmée !");
+                e.target.reset();
+                closeModal('register-modal');
+                
+                // Show Ticket
+                var ticketModal = document.getElementById('ticket-modal');
+                if (ticketModal) {
+                    document.getElementById('t-name').textContent = formName;
+                    document.getElementById('t-event').textContent = eventTitle;
+                    var tTypeEl = document.getElementById('t-type');
+                    if(tTypeEl) {
+                        tTypeEl.textContent = 'PASS PARTICIPANT';
+                        tTypeEl.style.background = 'var(--blue-tech)';
+                    }
+                    document.getElementById('t-id').textContent = 'ID: ' + docRef.id.toUpperCase();
+                    document.getElementById('t-qr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=050811&data=' + docRef.id;
+                    ticketModal.style.display = 'flex';
+                } else {
+                    alert("✅ Inscription confirmée !");
+                }
             }
-        }
+        });
     }).catch(function(err) {
         alert("❌ Erreur : " + err.message);
     }).finally(function() {

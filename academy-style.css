@@ -1,0 +1,302 @@
+/* 
+  GENIO ACADEMY MOBILE — SPECIFIC STYLES
+  Design System based on Genio Dark Theme (Navy/Orange)
+*/
+
+:root {
+    --nav-height: 75px;
+    --header-height: 80px;
+    --accent-orange: #ff6b00;
+    --accent-blue: #00caff;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    /* Extra UI Elements */
+}
+
+body.mobile-app {
+    overflow-x: hidden;
+    overflow-y: auto;
+    background: #050811;
+    padding-bottom: var(--nav-height); /* Leave space for bottom nav */
+}
+
+/* APP HEADER (Native Look) */
+.app-header {
+    height: var(--header-height);
+    background: #050811;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--accent-orange), #ff9100);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+}
+
+.user-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-level {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent-orange);
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.user-xp {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 2px;
+}
+
+.streak-badge {
+    background: rgba(255, 107, 0, 0.1);
+    color: var(--accent-orange);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1px solid rgba(255, 107, 0, 0.2);
+}
+
+/* APP CONTENT PANELS */
+.app-content {
+    padding: 1.5rem;
+}
+
+.tab-view {
+    display: none;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab-view.active {
+    display: block;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-banner {
+    margin-bottom: 2.5rem;
+}
+
+/* ACTIVE COURSE CARD */
+.course-active-card {
+    background: linear-gradient(165deg, #0a1b33 0%, #071221 100%);
+    border-radius: 24px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 3rem;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.course-active-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 200px;
+    height: 200px;
+    background: var(--accent-orange);
+    filter: blur(100px);
+    opacity: 0.2;
+}
+
+.course-active-card h3 {
+    font-size: 1.8rem;
+    margin: 1rem 0;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.badge-mini {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    background: var(--accent-orange);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.progress-container {
+    margin: 1.5rem 0;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.progress-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: var(--accent-orange);
+    box-shadow: 0 0 10px var(--accent-glow);
+    border-radius: 4px;
+}
+
+.progress-percent {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-orange);
+}
+
+/* BADGES LAYOUT */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h3 { font-size: 1.4rem; font-weight: 700; }
+.section-header a { font-size: 0.85rem; color: var(--accent-blue); text-decoration: none; font-weight: 500;}
+
+.badges-row {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding-bottom: 2rem;
+    scrollbar-width: none;
+}
+
+.badges-row::-webkit-scrollbar { display: none; }
+
+.badge-item {
+    min-width: 85px;
+    height: 110px;
+    background: #071221;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.badge-item.locked { opacity: 0.3; filter: grayscale(1); }
+.badge-item.active { border-color: var(--accent-orange); box-shadow: 0 5px 15px rgba(255,107,0,0.15); }
+
+.badge-tooltip {
+    position: absolute;
+    bottom: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+}
+
+/* BOTTOM NAVIGATION */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--nav-height);
+    background: #071221;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 1rem;
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-btn svg { width: 24px; height: 24px; transition: transform 0.3s ease; }
+.nav-btn span { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;}
+
+.nav-btn.active { color: var(--accent-blue); }
+.nav-btn.active svg { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--accent-blue)); }
+
+/* LEADERBOARD VIEW */
+.leaderboard-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.leader-item {
+    display: flex;
+    align-items: center;
+    padding: 1.2rem 1.5rem;
+    background: #071221;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.leader-item.top {
+    border-color: var(--accent-orange);
+    background: linear-gradient(90deg, #071221, rgba(255, 107, 0, 0.05));
+}
+
+.rank {
+    width: 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--accent-orange);
+}
+
+.name { flex: 1; font-weight: 600; font-size: 1rem; }
+.points { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #fff;}
+
+/* MOBILE SPECIFIC BUTTON OVERRIDE */
+.btn-primary.mini {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    border-radius: 12px;
+}

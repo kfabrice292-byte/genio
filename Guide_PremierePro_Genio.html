@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guide Formation — Montage Vidéo avec Adobe Premiere Pro | Genio</title>
+<style>
+:root {
+  --marine:#1E3A5F;--bleu:#2B72B8;--bleucl:#5B9BD5;--or:#F5A623;
+  --rouge:#E53E3E;--violet:#7C3AED;--rose:#DB2777;
+  --m1:#2B72B8;--m2:#1D9E75;--m3:#BA7517;--m4:#D85A30;--m5:#7C3AED;
+  --gris1:#F4F6F9;--gris2:#E8EDF3;--gris3:#CBD5E1;--gristxt:#64748B;--noir:#1A1A2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f8fafc;color:var(--noir);line-height:1.7}
+.nav{background:var(--marine);padding:0 2rem;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:2rem;height:52px}
+.nav-logo{color:#fff;font-weight:700;font-size:1.1rem;flex-shrink:0}.nav-logo span{color:var(--or)}
+.nav-links{display:flex;gap:1.5rem;overflow-x:auto}
+.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;font-size:.82rem;white-space:nowrap;transition:color .2s}.nav-links a:hover{color:#fff}
+.progress-bar{position:fixed;top:52px;left:0;height:3px;background:var(--rouge);z-index:99;transition:width .1s}
+.hero{background:var(--marine);color:#fff;padding:3.5rem 2rem 2.5rem}
+.hero-inner{max-width:880px;margin:0 auto}
+.hero-badge{display:inline-block;background:var(--rouge);color:#fff;font-size:.75rem;font-weight:700;padding:3px 12px;border-radius:20px;margin-bottom:1rem}
+.hero h1{font-size:2.1rem;font-weight:700;line-height:1.2;margin-bottom:.75rem}
+.hero h1 span{color:#FC8181}
+.hero p{color:rgba(255,255,255,.75);font-size:1rem;max-width:640px;margin-bottom:1.5rem}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap}
+.hero-meta span{font-size:.85rem;color:rgba(255,255,255,.6)}.hero-meta strong{color:var(--or)}
+.toc{background:rgba(255,255,255,.06);border-radius:10px;padding:1rem 1.5rem;margin-top:1.5rem}
+.toc h3{font-size:.8rem;text-transform:uppercase;letter-spacing:.07em;color:var(--bleucl);margin-bottom:.6rem}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.3rem}
+.toc-grid a{color:rgba(255,255,255,.75);text-decoration:none;font-size:.88rem;padding:.2rem 0;display:flex;align-items:center;gap:.5rem}
+.toc-grid a::before{content:'›';color:var(--or)}.toc-grid a:hover{color:#fff}
+.container{max-width:880px;margin:0 auto;padding:2.5rem 1.5rem}
+.mod-header{border-radius:12px;padding:1.5rem 1.75rem;margin-bottom:1.5rem;color:#fff}
+.mod-num{font-size:.78rem;font-weight:700;letter-spacing:.1em;opacity:.8;margin-bottom:.3rem}
+.mod-title{font-size:1.6rem;font-weight:700;margin-bottom:.4rem}
+.mod-sub{font-size:.9rem;opacity:.8}
+.section{margin-bottom:2.5rem}
+h2{font-size:1.2rem;font-weight:700;color:var(--marine);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:2px solid var(--gris2)}
+h3{font-size:1rem;font-weight:700;color:var(--bleu);margin:1.2rem 0 .6rem}
+p{margin-bottom:.8rem;font-size:.95rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin:1rem 0}
+.card{background:#fff;border:.5px solid var(--gris3);border-radius:10px;padding:1rem 1.1rem}
+.card-icon{font-size:1.4rem;margin-bottom:.5rem}.card h4{font-size:.92rem;font-weight:700;color:var(--marine);margin-bottom:.3rem}
+.card p{font-size:.84rem;color:var(--gristxt);margin:0}
+.info-box{border-radius:8px;padding:.9rem 1.1rem;margin:1rem 0;font-size:.9rem;border-left:4px solid}
+.info-box.tip{background:#EFF6FF;border-color:var(--bleu);color:#1e3a5f}
+.info-box.warn{background:#FEF3C7;border-color:var(--m3);color:#633806}
+.info-box.good{background:#D1FAE5;border-color:var(--m2);color:#065F46}
+.info-box.danger{background:#FEE2E2;border-color:var(--rouge);color:#991B1B}
+.info-box strong{font-weight:700}
+.ref-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.88rem}
+.ref-table th{background:var(--marine);color:#fff;padding:8px 12px;text-align:left}
+.ref-table td{padding:7px 12px;border-bottom:.5px solid var(--gris2)}
+.ref-table tr:nth-child(even) td{background:var(--gris1)}
+.ref-table code{background:#f1f5f9;padding:1px 5px;border-radius:3px;font-family:monospace;font-size:.82rem;color:var(--rouge)}
+.steps{display:flex;flex-direction:column;gap:.6rem;margin:1rem 0}
+.step-item{display:flex;gap:.9rem;align-items:flex-start;padding:.8rem 1rem;background:#fff;border:.5px solid var(--gris3);border-radius:8px}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;color:#fff;flex-shrink:0}
+.step-content h4{font-size:.9rem;font-weight:700;color:var(--marine);margin-bottom:2px}
+.step-content p{font-size:.84rem;color:var(--gristxt);margin:0}
+.shortcut-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin:1rem 0}
+.sc-item{display:flex;align-items:center;gap:.7rem;padding:.55rem .8rem;background:#fff;border:.5px solid var(--gris3);border-radius:8px}
+.sc-key{font-family:monospace;font-size:.82rem;font-weight:700;background:var(--marine);color:#fff;padding:2px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+.sc-desc{font-size:.85rem;color:var(--noir)}
+.interface-schema{background:#fff;border:.5px solid var(--gris3);border-radius:12px;overflow:hidden;margin:1rem 0}
+.iface-row{display:flex;align-items:stretch;min-height:42px;border-bottom:.5px solid var(--gris2)}
+.iface-row:last-child{border-bottom:none}
+.iface-label{background:var(--marine);color:#fff;font-size:.82rem;font-weight:700;padding:8px 14px;min-width:180px;display:flex;align-items:center}
+.iface-desc{padding:8px 14px;font-size:.84rem;color:var(--gristxt);display:flex;align-items:center;flex:1}
+.iface-alt{background:var(--gris1)}
+.quiz-block{background:#fff;border:2px solid var(--gris2);border-radius:12px;padding:1.5rem;margin:1.5rem 0}
+.quiz-header{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
+.quiz-badge{font-size:.72rem;font-weight:700;padding:4px 10px;border-radius:20px;color:#fff}
+.quiz-title{font-size:1rem;font-weight:700;color:var(--marine)}
+.quiz-item{margin-bottom:1.2rem}
+.quiz-question{font-size:.95rem;color:var(--noir);margin-bottom:.8rem;line-height:1.5}
+.quiz-options{display:flex;flex-direction:column;gap:.45rem}
+.quiz-opt{display:flex;align-items:flex-start;gap:.7rem;padding:.6rem .85rem;border:1.5px solid var(--gris3);border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem}
+.quiz-opt:hover{border-color:var(--bleu);background:#EFF6FF}
+.quiz-opt input{margin-top:2px;flex-shrink:0;cursor:pointer}
+.quiz-opt.correct{border-color:var(--m2);background:#D1FAE5;color:#065F46}
+.quiz-opt.wrong{border-color:var(--rouge);background:#FEE2E2;color:#991B1B}
+.quiz-opt.reveal-correct{border-color:var(--m2);background:#D1FAE5;color:#065F46}
+.quiz-btn{border:none;padding:.6rem 1.4rem;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;transition:background .2s;color:#fff}
+.quiz-btn:disabled{background:var(--gristxt)!important;cursor:default}
+.quiz-feedback{margin-top:.8rem;padding:.7rem 1rem;border-radius:8px;font-size:.88rem;display:none}
+.quiz-feedback.show{display:block}
+.quiz-feedback.ok{background:#D1FAE5;color:#065F46;border:1px solid var(--m2)}
+.quiz-feedback.ko{background:#FEE2E2;color:#991B1B;border:1px solid var(--rouge)}
+.quiz-score{margin-top:.5rem;font-size:.82rem;color:var(--gristxt)}
+.exercice{background:var(--gris1);border-left:4px solid var(--marine);border-radius:0 10px 10px 0;padding:1.2rem 1.4rem;margin:1.5rem 0}
+.ex-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.8rem}
+.ex-badge{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:20px;color:#fff}
+.ex-title{font-size:.95rem;font-weight:700;color:var(--marine)}
+.ex-steps{list-style:none;display:flex;flex-direction:column;gap:.4rem}
+.ex-steps li{font-size:.88rem;color:var(--noir);padding-left:1.2rem;position:relative}
+.ex-steps li::before{content:'▸';color:var(--bleu);position:absolute;left:0}
+.livrable{margin-top:.8rem;padding:.6rem .9rem;background:#fff;border-radius:6px;font-size:.85rem;border:1px solid var(--gris3)}
+.livrable strong{color:var(--marine)}
+.timeline-workflow{position:relative;padding-left:2rem;margin:1rem 0}
+.timeline-workflow::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--gris3)}
+.tl-item{position:relative;margin-bottom:1rem;padding-left:.5rem}
+.tl-item::before{content:'';position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;border:2px solid #fff;z-index:1}
+.tl-item h4{font-size:.9rem;font-weight:700;color:var(--marine);margin-bottom:.2rem}
+.tl-item p{font-size:.85rem;color:var(--gristxt);margin:0}
+.score-total{background:var(--marine);color:#fff;border-radius:12px;padding:1.5rem;text-align:center;margin:2rem 0}
+.score-total h3{font-size:1.1rem;margin-bottom:.5rem}
+.score-big{font-size:2.5rem;font-weight:700;color:var(--or)}
+.score-sub{font-size:.85rem;color:var(--bleucl);margin-top:.3rem}
+footer{background:var(--marine);color:rgba(255,255,255,.5);text-align:center;padding:1.5rem;font-size:.82rem;margin-top:3rem}
+footer strong{color:var(--or)}
+@media(max-width:600px){.hero h1{font-size:1.55rem}.card-grid,.shortcut-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-logo">Ge<span>nio</span></div>
+  <div class="nav-links">
+    <a href="#m1">M1 · Interface</a>
+    <a href="#m2">M2 · Montage</a>
+    <a href="#m3">M3 · Son</a>
+    <a href="#m4">M4 · Effets & Couleur</a>
+    <a href="#m5">M5 · Export</a>
+    <a href="#score">Mon score</a>
+  </div>
+</nav>
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Formation Genio · Vidéo</div>
+    <h1>Montage Vidéo avec<br><span>Adobe Premiere Pro</span></h1>
+    <p>De l'import de vos rushes à l'export final : maîtrisez le logiciel de référence des professionnels de l'audiovisuel, pas à pas, de façon autonome.</p>
+    <div class="hero-meta">
+      <span>Niveau : <strong>Débutants complets</strong></span>
+      <span>Durée : <strong>1 journée</strong></span>
+      <span>Modules : <strong>5</strong></span>
+      <span>Quiz : <strong>15 questions interactives</strong></span>
+    </div>
+    <div class="toc">
+      <h3>Sommaire</h3>
+      <div class="toc-grid">
+        <a href="#m1">Module 1 · Interface & Projet</a>
+        <a href="#m2">Module 2 · Montage image</a>
+        <a href="#m3">Module 3 · Son & Audio</a>
+        <a href="#m4">Module 4 · Effets & Couleur</a>
+        <a href="#m5">Module 5 · Titrage & Export</a>
+        <a href="#score">Score global</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 1 ══════════ -->
+<div class="container" id="m1">
+  <div class="mod-header" style="background:var(--m1)">
+    <div class="mod-num">MODULE 1 · 08H30 – 10H30</div>
+    <div class="mod-title">Interface & Gestion de projet</div>
+    <div class="mod-sub">Comprendre l'interface, créer un projet, importer vos médias, organiser vos rushes</div>
+  </div>
+
+  <div class="section">
+    <h2>1.1 Qu'est-ce qu'Adobe Premiere Pro ?</h2>
+    <p><strong>Adobe Premiere Pro</strong> est le logiciel de montage vidéo non-linéaire (NLE) de référence mondiale, utilisé par les professionnels du cinéma, de la télévision et du web. Il fait partie de la suite Adobe Creative Cloud et s'intègre parfaitement avec After Effects, Photoshop et Audition.</p>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🎬</div><h4>Montage non-linéaire</h4><p>Vous pouvez accéder à n'importe quel moment de votre vidéo et modifier l'ordre des plans sans détruire les originaux.</p></div>
+      <div class="card"><div class="card-icon">🔗</div><h4>Intégration Adobe</h4><p>Lien direct avec After Effects (effets), Audition (audio), Photoshop (images), Media Encoder (export).</p></div>
+      <div class="card"><div class="card-icon">🤖</div><h4>IA intégrée (Sensei)</h4><p>Transcription auto, sous-titres IA, remixage musical, amélioration vocale, colorimétrie automatique.</p></div>
+    </div>
+    <div class="info-box tip"><strong>Terminologie clé :</strong> Rush = fichier vidéo brut non monté · Séquence = votre montage (la timeline) · Chutier = dossier d'organisation dans Premiere · Codec = format de compression vidéo · Point d'entrée/sortie = début et fin d'un clip sélectionné</div>
+  </div>
+
+  <div class="section">
+    <h2>1.2 L'interface — 4 panneaux fondamentaux</h2>
+    <div class="interface-schema">
+      <div class="iface-row"><div class="iface-label">Panneau Projet</div><div class="iface-desc">Coin supérieur gauche. Contient tous vos médias importés (vidéos, sons, images). Organisez en chutiers (dossiers).</div></div>
+      <div class="iface-row iface-alt"><div class="iface-label">Moniteur Source</div><div class="iface-desc">Centre gauche. Prévisualise un clip avant de le placer dans la timeline. Définissez les points IN (I) et OUT (O) ici.</div></div>
+      <div class="iface-row"><div class="iface-label">Moniteur Programme</div><div class="iface-desc">Centre droit. Affiche le résultat de votre montage en temps réel. Appuyez sur Espace pour lire.</div></div>
+      <div class="iface-row iface-alt"><div class="iface-label">Timeline (Montage)</div><div class="iface-desc">Bas de l'écran. Le cœur du montage. Vos pistes vidéo (V1, V2…) au-dessus, audio (A1, A2…) en dessous.</div></div>
+      <div class="iface-row"><div class="iface-label">Panneau Effets</div><div class="iface-desc">Onglet en bas à gauche. Contient tous les effets vidéo, audio et transitions disponibles.</div></div>
+      <div class="iface-row iface-alt"><div class="iface-label">Contrôles d'effets</div><div class="iface-desc">Haut gauche (onglet). Paramètres des effets appliqués au clip sélectionné (trajectoire, opacité, effets…).</div></div>
+    </div>
+    <div class="info-box good"><strong>Astuce :</strong> Allez dans Fenêtre > Espace de travail > Montage pour réinitialiser la disposition par défaut. Vous pouvez aussi créer votre propre espace de travail et l'enregistrer.</div>
+  </div>
+
+  <div class="section">
+    <h2>1.3 Créer un projet et une séquence</h2>
+    <div class="steps">
+      <div class="step-item"><div class="step-num" style="background:var(--m1)">1</div><div class="step-content"><h4>Nouveau projet</h4><p>Fichier > Nouveau > Projet. Donnez un nom, choisissez l'emplacement de sauvegarde. Cliquez OK.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m1)">2</div><div class="step-content"><h4>Organiser vos chutiers</h4><p>Dans le panneau Projet, créez des dossiers : clic droit > Nouveau chutier. Suggestion : Vidéos, Sons, Musiques, Images, Exports.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m1)">3</div><div class="step-content"><h4>Importer vos médias</h4><p>Fichier > Importer (Ctrl+I) ou glissez-déposez directement dans le panneau Projet. Premiere ne copie pas les fichiers, il crée des liens vers leurs emplacements d'origine.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m1)">4</div><div class="step-content"><h4>Créer une séquence</h4><p>Méthode rapide : glissez un clip vidéo sur l'icône "Nouvel élément" en bas du panneau Projet. Premiere crée une séquence aux mêmes paramètres que votre clip (résolution, fréquence d'images).</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m1)">5</div><div class="step-content"><h4>Paramètres manuels</h4><p>Fichier > Nouvelle séquence. Préréglages recommandés : AVCHD 1080p25 (caméra classique) ou Digital SLR 1080p (reflex). Pour RS : Social Media > Vertical 1080p (9:16).</p></div></div>
+    </div>
+
+    <h2>1.4 Raccourcis essentiels — Navigation & Général</h2>
+    <div class="shortcut-grid">
+      <div class="sc-item"><span class="sc-key">Ctrl+S</span><span class="sc-desc">Sauvegarder le projet</span></div>
+      <div class="sc-item"><span class="sc-key">Ctrl+Z</span><span class="sc-desc">Annuler la dernière action</span></div>
+      <div class="sc-item"><span class="sc-key">Espace</span><span class="sc-desc">Lecture / Pause</span></div>
+      <div class="sc-item"><span class="sc-key">J K L</span><span class="sc-desc">Rewind · Pause · Avance rapide</span></div>
+      <div class="sc-item"><span class="sc-key">← →</span><span class="sc-desc">Image précédente / suivante</span></div>
+      <div class="sc-item"><span class="sc-key">+ –</span><span class="sc-desc">Zoom avant / arrière sur la timeline</span></div>
+      <div class="sc-item"><span class="sc-key">Home / End</span><span class="sc-desc">Début / Fin de la séquence</span></div>
+      <div class="sc-item"><span class="sc-key">I / O</span><span class="sc-desc">Marquer point d'entrée / sortie</span></div>
+    </div>
+    <div class="info-box warn"><strong>CRUCIAL — Sauvegardez régulièrement :</strong> Premiere peut planter. Configurez la sauvegarde automatique : Édition > Préférences > Sauvegarde automatique. Recommandé : toutes les 5 minutes, 20 versions.</div>
+  </div>
+
+  <!-- QUIZ 1 -->
+  <div class="quiz-block">
+    <div class="quiz-header"><span class="quiz-badge" style="background:var(--m1)">QUIZ · M1</span><span class="quiz-title">Évaluation — Interface & Projet</span></div>
+    <div class="quiz-item" data-correct="b">
+      <p class="quiz-question"><strong>Q1.</strong> Quel panneau de Premiere Pro affiche le résultat de votre montage en cours ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q1m1" value="a"> Moniteur Source</label>
+        <label class="quiz-opt"><input type="radio" name="q1m1" value="b"> Moniteur Programme</label>
+        <label class="quiz-opt"><input type="radio" name="q1m1" value="c"> Panneau Projet</label>
+        <label class="quiz-opt"><input type="radio" name="q1m1" value="d"> Contrôles d'effets</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="c">
+      <p class="quiz-question"><strong>Q2.</strong> Que se passe-t-il quand vous importez un fichier vidéo dans Premiere Pro ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q2m1" value="a"> Premiere copie le fichier dans son propre dossier</label>
+        <label class="quiz-opt"><input type="radio" name="q2m1" value="b"> Le fichier est converti en format Premiere</label>
+        <label class="quiz-opt"><input type="radio" name="q2m1" value="c"> Premiere crée un lien vers le fichier à son emplacement d'origine</label>
+        <label class="quiz-opt"><input type="radio" name="q2m1" value="d"> Le fichier est compressé pour économiser de l'espace</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="a">
+      <p class="quiz-question"><strong>Q3.</strong> Quels raccourcis clavier servent à contrôler la vitesse et la direction de lecture dans Premiere ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q3m1" value="a"> J (rewind), K (pause), L (avance)</label>
+        <label class="quiz-opt"><input type="radio" name="q3m1" value="b"> W, E, R</label>
+        <label class="quiz-opt"><input type="radio" name="q3m1" value="c"> 1, 2, 3</label>
+        <label class="quiz-opt"><input type="radio" name="q3m1" value="d"> F1, F2, F3</label>
+      </div>
+    </div>
+    <button class="quiz-btn" style="background:var(--m1)" onclick="checkQuiz(this,1)">Valider mes réponses</button>
+    <div class="quiz-feedback"></div><div class="quiz-score"></div>
+  </div>
+
+  <div class="exercice">
+    <div class="ex-header"><span class="ex-badge" style="background:var(--m1)">EXERCICE 1</span><span class="ex-title">Créer le projet Genio</span></div>
+    <ul class="ex-steps">
+      <li>Créez un nouveau projet nommé "Formation_Genio_Video"</li>
+      <li>Créez 4 chutiers : Rushes, Musiques, Graphiques, Exports</li>
+      <li>Importez les fichiers vidéo fournis dans le chutier Rushes</li>
+      <li>Glissez le premier rush sur l'icône "Nouvel élément" pour créer la séquence automatiquement</li>
+      <li>Naviguez dans la timeline avec J/K/L et les flèches</li>
+    </ul>
+    <div class="livrable"><strong>Livrable :</strong> Projet organisé avec chutiers + séquence ouverte dans la timeline</div>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 2 ══════════ -->
+<div class="container" id="m2">
+  <div class="mod-header" style="background:var(--m2)">
+    <div class="mod-num">MODULE 2 · 10H45 – 12H30</div>
+    <div class="mod-title">Montage image — Couper, assembler, rythmer</div>
+    <div class="mod-sub">Maîtriser les outils de découpe, d'assemblage et de trimming pour construire votre séquence</div>
+  </div>
+
+  <div class="section">
+    <h2>2.1 Les outils de montage essentiels</h2>
+    <table class="ref-table">
+      <tr><th>Touche</th><th>Outil</th><th>Ce qu'il fait</th></tr>
+      <tr><td><code>V</code></td><td>Sélection</td><td>Sélectionner, déplacer, redimensionner les clips sur la timeline</td></tr>
+      <tr><td><code>C</code></td><td>Rasoir (Cutter)</td><td>Couper un clip à l'endroit où vous cliquez. Coupure nette.</td></tr>
+      <tr><td><code>A</code></td><td>Sélection par glissement</td><td>Sélectionner plusieurs clips d'un coup en glissant</td></tr>
+      <tr><td><code>B</code></td><td>Outil Trimming (Ripple)</td><td>Rogner un clip en décalant automatiquement tout ce qui suit</td></tr>
+      <tr><td><code>N</code></td><td>Trimmage Roulement</td><td>Déplace la coupure entre deux clips sans changer la durée totale</td></tr>
+      <tr><td><code>R</code></td><td>Vitesse / Durée (Rate Stretch)</td><td>Étirer ou comprimer un clip pour modifier sa vitesse</td></tr>
+      <tr><td><code>Y</code></td><td>Glisser (Slide)</td><td>Glisse un clip entre ses voisins sans changer le contenu</td></tr>
+      <tr><td><code>U</code></td><td>Décaler (Slip)</td><td>Change le contenu visible du clip sans changer sa position</td></tr>
+    </table>
+
+    <h2>2.2 Techniques de montage fondamentales</h2>
+
+    <h3>Méthode 3 points — la plus utilisée</h3>
+    <div class="steps">
+      <div class="step-item"><div class="step-num" style="background:var(--m2)">1</div><div class="step-content"><h4>Définir IN et OUT dans le Moniteur Source</h4><p>Double-cliquez sur un rush pour l'ouvrir dans le Moniteur Source. Naviguez puis appuyez sur I (point d'entrée) et O (point de sortie) pour sélectionner la portion à utiliser.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m2)">2</div><div class="step-content"><h4>Positionner la tête de lecture dans la timeline</h4><p>Cliquez sur la timeline à l'endroit où vous voulez insérer le clip.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m2)">3</div><div class="step-content"><h4>Insérer le clip</h4><p><strong>Virgule (,)</strong> = Insérer (pousse les clips suivants). <strong>Point (.)</strong> = Écraser (remplace ce qui est en dessous). Glisser-déposer fonctionne aussi.</p></div></div>
+    </div>
+
+    <h3>Raccourcis de montage avancés</h3>
+    <div class="shortcut-grid">
+      <div class="sc-item"><span class="sc-key">, (virgule)</span><span class="sc-desc">Insérer le clip (ripple insert)</span></div>
+      <div class="sc-item"><span class="sc-key">. (point)</span><span class="sc-desc">Écraser le clip (overwrite)</span></div>
+      <div class="sc-item"><span class="sc-key">X</span><span class="sc-desc">Marquer le clip entier (IN+OUT auto)</span></div>
+      <div class="sc-item"><span class="sc-key">Q</span><span class="sc-desc">Ripple trim à gauche (supprime+referme)</span></div>
+      <div class="sc-item"><span class="sc-key">W</span><span class="sc-desc">Ripple trim à droite (supprime+referme)</span></div>
+      <div class="sc-item"><span class="sc-key">Ctrl+K</span><span class="sc-desc">Couper le clip à la tête de lecture</span></div>
+      <div class="sc-item"><span class="sc-key">Delete</span><span class="sc-desc">Supprimer (laisse un trou)</span></div>
+      <div class="sc-item"><span class="sc-key">Maj+Delete</span><span class="sc-desc">Supprimer et refermer (ripple delete)</span></div>
+      <div class="sc-item"><span class="sc-key">Ctrl+D</span><span class="sc-desc">Appliquer la transition par défaut</span></div>
+      <div class="sc-item"><span class="sc-key">Ctrl+Maj+D</span><span class="sc-desc">Transition audio par défaut</span></div>
+    </div>
+
+    <h2>2.3 Le workflow de montage professionnel</h2>
+    <div class="timeline-workflow">
+      <div class="tl-item" style="border-left:none"><div style="position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--m2);border:2px solid #fff;z-index:1"></div><h4>1. Dérushage</h4><p>Visionnez tous vos rushes, notez les meilleures prises. Ne montez pas encore — regardez d'abord tout.</p></div>
+      <div class="tl-item"><div style="position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--m2);border:2px solid #fff;z-index:1"></div><h4>2. Bout à bout (assemblage)</h4><p>Assemblez les plans dans l'ordre narratif, sans vous soucier du détail. L'objectif : avoir une version complète.</p></div>
+      <div class="tl-item"><div style="position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--m2);border:2px solid #fff;z-index:1"></div><h4>3. Montage fin (fine cut)</h4><p>Affinez les points de coupe, soignez les raccords, travaillez le rythme. C'est la phase la plus longue.</p></div>
+      <div class="tl-item"><div style="position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--m2);border:2px solid #fff;z-index:1"></div><h4>4. Son, effets, titres</h4><p>Ajoutez musique, effets sonores, transitions, titres. Toujours APRÈS le montage image — jamais avant.</p></div>
+      <div class="tl-item"><div style="position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--m2);border:2px solid #fff;z-index:1"></div><h4>5. Étalonnage</h4><p>Correction colorimétrique pour homogénéiser et styliser l'image. Lumetri Color dans Premiere.</p></div>
+      <div class="tl-item"><div style="position:absolute;left:-1.7rem;top:.35rem;width:12px;height:12px;border-radius:50%;background:var(--m2);border:2px solid #fff;z-index:1"></div><h4>6. Export</h4><p>Export final selon la destination : YouTube, Instagram, télé, cinéma. Chaque format a ses paramètres.</p></div>
+    </div>
+  </div>
+
+  <!-- QUIZ 2 -->
+  <div class="quiz-block">
+    <div class="quiz-header"><span class="quiz-badge" style="background:var(--m2)">QUIZ · M2</span><span class="quiz-title">Évaluation — Montage image</span></div>
+    <div class="quiz-item" data-correct="b">
+      <p class="quiz-question"><strong>Q1.</strong> Quelle est la différence entre "Insérer" (virgule) et "Écraser" (point) dans Premiere ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q1m2" value="a"> Il n'y a aucune différence, les deux font la même chose</label>
+        <label class="quiz-opt"><input type="radio" name="q1m2" value="b"> Insérer pousse les clips suivants, Écraser remplace le contenu en dessous</label>
+        <label class="quiz-opt"><input type="radio" name="q1m2" value="c"> Insérer est pour la vidéo, Écraser est pour l'audio</label>
+        <label class="quiz-opt"><input type="radio" name="q1m2" value="d"> Insérer raccourcit le projet, Écraser l'allonge</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="c">
+      <p class="quiz-question"><strong>Q2.</strong> Quel raccourci coupe le clip à l'endroit exact de la tête de lecture dans la timeline ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q2m2" value="a"> Ctrl+C</label>
+        <label class="quiz-opt"><input type="radio" name="q2m2" value="b"> Ctrl+X</label>
+        <label class="quiz-opt"><input type="radio" name="q2m2" value="c"> Ctrl+K</label>
+        <label class="quiz-opt"><input type="radio" name="q2m2" value="d"> Ctrl+B</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="d">
+      <p class="quiz-question"><strong>Q3.</strong> Dans quel ordre logique doit-on travailler sur un projet vidéo professionnel ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q3m2" value="a"> Étalonnage → Montage → Son → Export</label>
+        <label class="quiz-opt"><input type="radio" name="q3m2" value="b"> Son → Montage → Effets → Étalonnage → Export</label>
+        <label class="quiz-opt"><input type="radio" name="q3m2" value="c"> Export → Montage → Son → Étalonnage</label>
+        <label class="quiz-opt"><input type="radio" name="q3m2" value="d"> Dérushage → Bout à bout → Fine cut → Son & Effets → Étalonnage → Export</label>
+      </div>
+    </div>
+    <button class="quiz-btn" style="background:var(--m2)" onclick="checkQuiz(this,2)">Valider mes réponses</button>
+    <div class="quiz-feedback"></div><div class="quiz-score"></div>
+  </div>
+
+  <div class="exercice">
+    <div class="ex-header"><span class="ex-badge" style="background:var(--m2)">EXERCICE 2</span><span class="ex-title">Premier montage — séquence Genio 60 secondes</span></div>
+    <ul class="ex-steps">
+      <li>Sélectionnez 5 à 8 des meilleurs plans de vos rushes avec les points IN/OUT</li>
+      <li>Assemblez-les dans la timeline en utilisant la méthode 3 points (virgule pour insérer)</li>
+      <li>Utilisez l'outil Rasoir (C) pour affiner les coupes sur 2 plans</li>
+      <li>Essayez le Ripple Delete (Maj+Suppr) pour supprimer un plan sans laisser de trou</li>
+      <li>Objectif : une séquence de 45 à 60 secondes fluide et rythmée</li>
+    </ul>
+    <div class="livrable"><strong>Livrable :</strong> Séquence montée de 45-60 secondes avec au moins 5 plans</div>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 3 ══════════ -->
+<div class="container" id="m3">
+  <div class="mod-header" style="background:var(--m3)">
+    <div class="mod-num">MODULE 3 · 13H30 – 15H00</div>
+    <div class="mod-title">Son & Audio — Mixer comme un pro</div>
+    <div class="mod-sub">Régler les niveaux, ajouter de la musique, corriger la voix, utiliser l'IA audio</div>
+  </div>
+
+  <div class="section">
+    <h2>3.1 Comprendre les pistes audio dans Premiere</h2>
+    <p>La timeline Premiere distingue plusieurs types de pistes audio. Comprendre leur organisation est essentiel pour un mixage propre :</p>
+    <table class="ref-table">
+      <tr><th>Type de piste</th><th>Contenu typique</th><th>Niveau cible</th></tr>
+      <tr><td>A1 — Son direct</td><td>Son de caméra, ambiance, interviews</td><td>-12 à -6 dB</td></tr>
+      <tr><td>A2 — Voix off / commentaire</td><td>Narration enregistrée séparément</td><td>-12 à -6 dB</td></tr>
+      <tr><td>A3 — Musique</td><td>Bande sonore, ambiance musicale</td><td>-18 à -24 dB (en dessous des voix)</td></tr>
+      <tr><td>A4 — Effets sonores</td><td>Bruits, transitions sonores</td><td>Variable selon le contexte</td></tr>
+    </table>
+    <div class="info-box tip"><strong>Règle des -6 dB :</strong> Le niveau de votre mix final ne doit jamais dépasser -6 dBFS (0 dB = saturation). La voix doit être entre -12 et -6 dB. La musique 6 à 12 dB en dessous de la voix. Surveillez le panneau Niveaux audio (Fenêtre > Niveaux audio).</div>
+
+    <h2>3.2 Réglages du son — techniques essentielles</h2>
+
+    <h3>Ajuster le gain et le volume</h3>
+    <div class="steps">
+      <div class="step-item"><div class="step-num" style="background:var(--m3)">1</div><div class="step-content"><h4>Gain audio (Ctrl+G sur un clip)</h4><p>Modifie le niveau à la source du clip. Utilisez le gain pour corriger une prise trop faible ou trop forte. Règle : ne pas dépasser +12 dB de gain (distorsion au-delà).</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m3)">2</div><div class="step-content"><h4>Volume par clip (ligne jaune)</h4><p>Cliquez sur le clip audio → une ligne jaune apparaît. Cliquez-glissez pour ajuster le volume. Alt+clic pour créer une image-clé (fade in/out).</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m3)">3</div><div class="step-content"><h4>Transitions audio — Fondu</h4><p>Effets > Transitions audio > Fondu croisé exponentiel. Glissez sur une coupure audio. Durée recommandée : 5 à 15 images pour un fondu naturel.</p></div></div>
+    </div>
+
+    <h2>3.3 Les outils IA audio de Premiere Pro 2024</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🎙️</div><h4>Amélioration vocale IA</h4><p>Clic droit sur un clip audio > Amélioration de la parole. L'IA réduit le bruit de fond et améliore la clarté de la voix en un clic.</p></div>
+      <div class="card"><div class="card-icon">📝</div><h4>Transcription auto</h4><p>Fenêtre > Transcription. L'IA transcrit automatiquement la parole. Utilisez-la pour créer des sous-titres ou naviguer dans vos interviews.</p></div>
+      <div class="card"><div class="card-icon">🎵</div><h4>Remixage musical IA</h4><p>Sélectionnez une piste musicale > Propriétés > Durée > Remix. L'IA adapte automatiquement la durée de la musique à celle de votre séquence.</p></div>
+      <div class="card"><div class="card-icon">🔇</div><h4>Suppression du bruit</h4><p>Effets > Amplitude et compression > Denoise. Réduit le bruit de fond continu (ventilateur, climatisation, souffle de micro).</p></div>
+    </div>
+    <div class="info-box good"><strong>Workflow audio recommandé :</strong> 1) Amélioration vocale IA → 2) Ajustement du gain → 3) Égalisation si besoin → 4) Compression légère → 5) Ajout de la musique en dessous → 6) Fondus en début et fin de séquence.</div>
+  </div>
+
+  <!-- QUIZ 3 -->
+  <div class="quiz-block">
+    <div class="quiz-header"><span class="quiz-badge" style="background:var(--m3)">QUIZ · M3</span><span class="quiz-title">Évaluation — Son & Audio</span></div>
+    <div class="quiz-item" data-correct="c">
+      <p class="quiz-question"><strong>Q1.</strong> À quel niveau (dB) la voix principale doit-elle être dans un mix vidéo professionnel ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q1m3" value="a"> 0 dB (maximum)</label>
+        <label class="quiz-opt"><input type="radio" name="q1m3" value="b"> -3 dB</label>
+        <label class="quiz-opt"><input type="radio" name="q1m3" value="c"> Entre -12 et -6 dB</label>
+        <label class="quiz-opt"><input type="radio" name="q1m3" value="d"> -30 dB</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="a">
+      <p class="quiz-question"><strong>Q2.</strong> Quelle fonctionnalité IA de Premiere 2024 adapte automatiquement la durée d'une musique à votre séquence ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q2m3" value="a"> Remixage musical (Remix)</label>
+        <label class="quiz-opt"><input type="radio" name="q2m3" value="b"> Amélioration de la parole</label>
+        <label class="quiz-opt"><input type="radio" name="q2m3" value="c"> Transcription automatique</label>
+        <label class="quiz-opt"><input type="radio" name="q2m3" value="d"> Réduction du bruit (Denoise)</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="b">
+      <p class="quiz-question"><strong>Q3.</strong> Quelle est la différence entre "Gain audio" et "Volume" dans Premiere ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q3m3" value="a"> Il n'y a aucune différence</label>
+        <label class="quiz-opt"><input type="radio" name="q3m3" value="b"> Le gain modifie le niveau à la source du clip, le volume contrôle le niveau dans le mix de la séquence</label>
+        <label class="quiz-opt"><input type="radio" name="q3m3" value="c"> Le gain est pour l'audio, le volume est pour la vidéo</label>
+        <label class="quiz-opt"><input type="radio" name="q3m3" value="d"> Le gain est permanent, le volume est temporaire</label>
+      </div>
+    </div>
+    <button class="quiz-btn" style="background:var(--m3)" onclick="checkQuiz(this,3)">Valider mes réponses</button>
+    <div class="quiz-feedback"></div><div class="quiz-score"></div>
+  </div>
+
+  <div class="exercice">
+    <div class="ex-header"><span class="ex-badge" style="background:var(--m3)">EXERCICE 3</span><span class="ex-title">Mixage audio de la séquence Genio</span></div>
+    <ul class="ex-steps">
+      <li>Sur votre séquence de l'exercice 2, appliquez l'amélioration vocale IA sur les plans avec parole (clic droit > Amélioration de la parole)</li>
+      <li>Importez une musique libre de droits et placez-la sur la piste A3</li>
+      <li>Ajustez le volume de la musique à -20 dB environ (ligne jaune sur le clip)</li>
+      <li>Ajoutez un fondu en entrée et un fondu en sortie sur la musique (5-10 images)</li>
+      <li>Vérifiez dans le panneau Niveaux audio que le mix ne dépasse pas -6 dB</li>
+    </ul>
+    <div class="livrable"><strong>Livrable :</strong> Séquence avec voix + musique d'ambiance bien équilibrées</div>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 4 ══════════ -->
+<div class="container" id="m4">
+  <div class="mod-header" style="background:var(--m4)">
+    <div class="mod-num">MODULE 4 · 15H15 – 16H15</div>
+    <div class="mod-title">Effets visuels & Étalonnage couleur</div>
+    <div class="mod-sub">Transitions, effets, Lumetri Color, LUTs — donner un look professionnel à votre vidéo</div>
+  </div>
+
+  <div class="section">
+    <h2>4.1 Les transitions — utilisation professionnelle</h2>
+    <p>Les transitions marquent le passage d'un plan au suivant. Règle d'or des pros : <strong>la coupe franche est la reine des transitions</strong>. Les transitions élaborées s'utilisent avec parcimonie.</p>
+    <table class="ref-table">
+      <tr><th>Transition</th><th>Usage recommandé</th><th>Durée typique</th></tr>
+      <tr><td>Coupe franche (aucune)</td><td>80% de vos montages. Propre, dynamique, pro.</td><td>0 image</td></tr>
+      <tr><td>Fondu au noir / depuis le noir</td><td>Début/fin de vidéo, ellipse temporelle importante</td><td>15 à 25 images</td></tr>
+      <tr><td>Fondu enchaîné (Dip to Black)</td><td>Passage du temps, changement de lieu discret</td><td>10 à 20 images</td></tr>
+      <tr><td>Dissolution croisée (Cross Dissolve)</td><td>Transition douce entre deux plans proches</td><td>10 à 15 images</td></tr>
+      <tr><td>Wipe / Glissement</td><td>Montages dynamiques, sports, reportages TV</td><td>8 à 12 images</td></tr>
+    </table>
+    <div class="info-box danger"><strong>Erreur de débutant :</strong> N'utilisez pas une transition différente sur chaque coupe. C'est le signe caractéristique d'un montage amateur. Choisissez 1 ou 2 transitions maximum pour tout votre projet et restez cohérent.</div>
+
+    <h2>4.2 Les effets vidéo essentiels</h2>
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">🔍</div><h4>Trajectoire (Motion)</h4><p>Repositionner, redimensionner, faire pivoter un clip. Contrôles d'effets > Trajectoire. Créez des animations avec les images-clés.</p></div>
+      <div class="card"><div class="card-icon">👁️</div><h4>Opacité</h4><p>Rendre un clip transparent ou semi-transparent. Permet les incrustations, surimpressions, fondus personnalisés.</p></div>
+      <div class="card"><div class="card-icon">⚡</div><h4>Vitesse / Durée</h4><p>Clic droit sur un clip > Vitesse/Durée. Ralenti (50%), accéléré (200%). Time Remapping pour vitesse variable.</p></div>
+      <div class="card"><div class="card-icon">✂️</div><h4>Recadrage (Crop)</h4><p>Effets > Transformation > Recadrage. Rogner les bords d'un clip sans changer la taille de l'image. Utile pour cacher les bords.</p></div>
+    </div>
+
+    <h2>4.3 Étalonnage colorimétrique avec Lumetri Color</h2>
+    <p>L'étalonnage (color grading) corrige et stylise la colorimétrie de vos plans. Dans Premiere, utilisez le panneau <strong>Lumetri Color</strong> (Fenêtre > Lumetri Color) ou l'espace de travail Couleur.</p>
+
+    <h3>Ordre d'étalonnage recommandé</h3>
+    <div class="steps">
+      <div class="step-item"><div class="step-num" style="background:var(--m4)">1</div><div class="step-content"><h4>Correction primaire — Exposition</h4><p>Onglet Correction de base. Réglez : Exposition (luminosité globale), Contraste, Hautes lumières, Ombres, Blancs, Noirs. Objectif : image naturelle et correctement exposée.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m4)">2</div><div class="step-content"><h4>Balance des blancs</h4><p>Toujours dans Correction de base : Température (chaud/froid) et Teinte (vert/magenta). Utilisez la pipette sur un élément qui doit être blanc ou gris neutre.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m4)">3</div><div class="step-content"><h4>Courbes — affinement</h4><p>Onglet Courbes. Courbe RVB pour contrôler précisément les tons. Courbe HLS pour saturer/désaturer une couleur spécifique.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m4)">4</div><div class="step-content"><h4>Créatif — le "look"</h4><p>Onglet Créatif. Appliquez une LUT (Look Up Table) pour donner un style cinématique à votre vidéo. Réglez la Vivacité et la Saturation.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m4)">5</div><div class="step-content"><h4>Copier l'étalonnage sur tous les plans</h4><p>Clic droit sur le clip étalonné > Copier. Sélectionnez tous les autres clips > Clic droit > Coller les attributs > Cochez Lumetri Color > OK.</p></div></div>
+    </div>
+  </div>
+
+  <!-- QUIZ 4 -->
+  <div class="quiz-block">
+    <div class="quiz-header"><span class="quiz-badge" style="background:var(--m4)">QUIZ · M4</span><span class="quiz-title">Évaluation — Effets & Étalonnage</span></div>
+    <div class="quiz-item" data-correct="a">
+      <p class="quiz-question"><strong>Q1.</strong> Quelle est la règle professionnelle concernant les transitions dans un montage vidéo ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q1m4" value="a"> La coupe franche est la transition principale. On utilise 1-2 transitions max pour tout le projet, avec parcimonie.</label>
+        <label class="quiz-opt"><input type="radio" name="q1m4" value="b"> Chaque coupe doit avoir une transition différente pour dynamiser le montage</label>
+        <label class="quiz-opt"><input type="radio" name="q1m4" value="c"> Les transitions ne sont utilisées qu'au début et à la fin de la vidéo</label>
+        <label class="quiz-opt"><input type="radio" name="q1m4" value="d"> Plus il y a de transitions, plus le montage est professionnel</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="c">
+      <p class="quiz-question"><strong>Q2.</strong> Dans Lumetri Color, dans quel ordre doit-on étalonner une image ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q2m4" value="a"> Créatif (LUT) → Exposition → Balance des blancs</label>
+        <label class="quiz-opt"><input type="radio" name="q2m4" value="b"> Courbes → Exposition → Balance des blancs → Look créatif</label>
+        <label class="quiz-opt"><input type="radio" name="q2m4" value="c"> Exposition → Balance des blancs → Courbes → Look créatif (LUT)</label>
+        <label class="quiz-opt"><input type="radio" name="q2m4" value="d"> L'ordre n'a aucune importance dans Lumetri</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="d">
+      <p class="quiz-question"><strong>Q3.</strong> Comment appliquer rapidement le même étalonnage à tous les clips de votre séquence ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q3m4" value="a"> Il faut étalonner chaque clip manuellement, il n'y a pas de raccourci</label>
+        <label class="quiz-opt"><input type="radio" name="q3m4" value="b"> Utiliser la fonction "Appliquer à tous" dans le panneau Lumetri</label>
+        <label class="quiz-opt"><input type="radio" name="q3m4" value="c"> Dupliquer le calque d'ajustement dans After Effects</label>
+        <label class="quiz-opt"><input type="radio" name="q3m4" value="d"> Copier le clip étalonné → sélectionner les autres → Coller les attributs → cocher Lumetri Color</label>
+      </div>
+    </div>
+    <button class="quiz-btn" style="background:var(--m4)" onclick="checkQuiz(this,4)">Valider mes réponses</button>
+    <div class="quiz-feedback"></div><div class="quiz-score"></div>
+  </div>
+
+  <div class="exercice">
+    <div class="ex-header"><span class="ex-badge" style="background:var(--m4)">EXERCICE 4</span><span class="ex-title">Étalonnage et effets sur la séquence Genio</span></div>
+    <ul class="ex-steps">
+      <li>Ouvrez l'espace de travail Couleur (fenêtre > Espace de travail > Couleur)</li>
+      <li>Sélectionnez le premier plan vidéo et corrigez l'exposition dans Lumetri Color (Correction de base)</li>
+      <li>Ajustez la balance des blancs avec la pipette sur un élément neutre</li>
+      <li>Dans l'onglet Créatif, essayez une LUT (cliquez sur "Parcourir" pour en prévisualiser plusieurs)</li>
+      <li>Copiez cet étalonnage et collez les attributs sur tous les autres plans (Clic droit > Coller les attributs)</li>
+    </ul>
+    <div class="livrable"><strong>Livrable :</strong> Séquence avec étalonnage uniforme et look cohérent sur tous les plans</div>
+  </div>
+</div>
+
+<!-- ══════════ MODULE 5 ══════════ -->
+<div class="container" id="m5">
+  <div class="mod-header" style="background:var(--m5)">
+    <div class="mod-num">MODULE 5 · 16H15 – 17H30</div>
+    <div class="mod-title">Titrage, sous-titres & Export final</div>
+    <div class="mod-sub">Créer des titres professionnels, générer des sous-titres IA, exporter pour chaque plateforme</div>
+  </div>
+
+  <div class="section">
+    <h2>5.1 Créer des titres avec les Objets graphiques essentiels</h2>
+    <p>Premiere Pro intègre un outil de titrage puissant. Accédez via <strong>Fenêtre > Objets graphiques essentiels</strong> ou en cliquant sur l'outil Texte (T) dans la barre d'outils.</p>
+    <div class="steps">
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">1</div><div class="step-content"><h4>Créer un titre</h4><p>Activez l'outil Texte (T). Cliquez sur le Moniteur Programme et tapez votre texte. Un nouveau clip "Graphique" apparaît sur V2 dans la timeline.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">2</div><div class="step-content"><h4>Styler le texte</h4><p>Dans Objets graphiques essentiels > Modifier : Police, taille, couleur, ombre, fond. Pour Genio : police sans-serif (Arial, Montserrat), blanc sur fond marine ou texte or.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">3</div><div class="step-content"><h4>Aligner et positionner</h4><p>Boutons d'alignement dans le panneau Objets graphiques. Centrez horizontalement ou verticalement en un clic. Respectez les zones de sécurité des titres.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">4</div><div class="step-content"><h4>Animer avec les images-clés</h4><p>Dans Contrôles d'effets > Trajectoire : activez la minuterie sur Position. Créez 2 images-clés pour un déplacement simple (fondu de côté, apparition par le bas).</p></div></div>
+    </div>
+
+    <h2>5.2 Sous-titres automatiques avec l'IA</h2>
+    <div class="steps">
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">1</div><div class="step-content"><h4>Activer la transcription</h4><p>Fenêtre > Transcription. Cliquez sur "Transcrire la séquence". Sélectionnez la langue. L'IA génère automatiquement la transcription en quelques secondes.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">2</div><div class="step-content"><h4>Vérifier et corriger</h4><p>Parcourez la transcription, corrigez les erreurs éventuelles. Double-cliquez sur un mot pour vous positionner exactement dans la timeline.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">3</div><div class="step-content"><h4>Créer les sous-titres</h4><p>Cliquez sur "Créer des sous-titres" dans le panneau Transcription. Choisissez le style (position, couleur, fond). Les sous-titres s'insèrent automatiquement en synchronisation.</p></div></div>
+      <div class="step-item"><div class="step-num" style="background:var(--m5)">4</div><div class="step-content"><h4>Exporter les sous-titres</h4><p>Lors de l'export (Media Encoder), activez "Exporter les sous-titres". Format SRT pour YouTube/Vimeo, ou intégration directe dans la vidéo (burn-in).</p></div></div>
+    </div>
+
+    <h2>5.3 Export — paramètres pour chaque plateforme</h2>
+    <p><strong>Fichier > Exporter > Média (Ctrl+M)</strong> ou envoyer vers Adobe Media Encoder pour un export en arrière-plan pendant que vous continuez à travailler.</p>
+    <table class="ref-table">
+      <tr><th>Destination</th><th>Format / Codec</th><th>Résolution</th><th>Débit recommandé</th></tr>
+      <tr><td>YouTube / Vimeo</td><td>H.264</td><td>1920×1080 (1080p)</td><td>8-16 Mbps VBR 2 passes</td></tr>
+      <tr><td>Instagram Post</td><td>H.264</td><td>1080×1080 (carré)</td><td>3.5 Mbps max (2 min)</td></tr>
+      <tr><td>Instagram Reels / Story</td><td>H.264</td><td>1080×1920 (9:16)</td><td>3.5 Mbps max</td></tr>
+      <tr><td>Facebook</td><td>H.264</td><td>1280×720 minimum</td><td>4 Mbps VBR</td></tr>
+      <tr><td>Télévision / Broadcast</td><td>DNxHD / ProRes</td><td>1920×1080</td><td>145 Mbps (master)</td></tr>
+      <tr><td>Archive / Master</td><td>ProRes 422 / DNxHR</td><td>Natif du projet</td><td>Max qualité</td></tr>
+    </table>
+    <div class="info-box good"><strong>Workflow d'export recommandé :</strong> File → Export → Média → Choisir H.264 → Sélectionner un préréglage (YouTube 1080p HD) → Activer "Rendu maximal de qualité" → Envoyer dans la file d'attente Media Encoder → Exporter en arrière-plan.</div>
+  </div>
+
+  <!-- QUIZ 5 -->
+  <div class="quiz-block">
+    <div class="quiz-header"><span class="quiz-badge" style="background:var(--m5)">QUIZ FINAL · SYNTHÈSE</span><span class="quiz-title">Évaluation de synthèse — tout le programme</span></div>
+    <div class="quiz-item" data-correct="b">
+      <p class="quiz-question"><strong>Q1.</strong> Quel codec est recommandé pour exporter une vidéo destinée à YouTube ou aux réseaux sociaux ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q1m5" value="a"> ProRes 422 (master broadcast)</label>
+        <label class="quiz-opt"><input type="radio" name="q1m5" value="b"> H.264 avec préréglage YouTube 1080p HD</label>
+        <label class="quiz-opt"><input type="radio" name="q1m5" value="c"> MPEG-2 DVD</label>
+        <label class="quiz-opt"><input type="radio" name="q1m5" value="d"> AVI non compressé</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="d">
+      <p class="quiz-question"><strong>Q2.</strong> Comment créer des sous-titres synchronisés automatiquement dans Premiere Pro ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q2m5" value="a"> Les taper manuellement avec l'outil Texte sur chaque plan</label>
+        <label class="quiz-opt"><input type="radio" name="q2m5" value="b"> Importer un fichier SRT externe</label>
+        <label class="quiz-opt"><input type="radio" name="q2m5" value="c"> Utiliser After Effects pour les générer</label>
+        <label class="quiz-opt"><input type="radio" name="q2m5" value="d"> Fenêtre > Transcription → Transcrire la séquence (IA) → Créer des sous-titres</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="a">
+      <p class="quiz-question"><strong>Q3.</strong> Quelle résolution et quel format utiliser pour une Story Instagram (format vertical) ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q3m5" value="a"> 1080×1920 px (9:16) en H.264, max 3.5 Mbps</label>
+        <label class="quiz-opt"><input type="radio" name="q3m5" value="b"> 1920×1080 px (16:9) en H.264</label>
+        <label class="quiz-opt"><input type="radio" name="q3m5" value="c"> 1080×1080 px (1:1) en ProRes</label>
+        <label class="quiz-opt"><input type="radio" name="q3m5" value="d"> 720×1280 px en MPEG-2</label>
+      </div>
+    </div>
+    <div class="quiz-item" data-correct="c">
+      <p class="quiz-question"><strong>Q4.</strong> Quel raccourci clavier ouvre la fenêtre d'export dans Premiere Pro ?</p>
+      <div class="quiz-options">
+        <label class="quiz-opt"><input type="radio" name="q4m5" value="a"> Ctrl+E</label>
+        <label class="quiz-opt"><input type="radio" name="q4m5" value="b"> Ctrl+Maj+E</label>
+        <label class="quiz-opt"><input type="radio" name="q4m5" value="c"> Ctrl+M</label>
+        <label class="quiz-opt"><input type="radio" name="q4m5" value="d"> Ctrl+R</label>
+      </div>
+    </div>
+    <button class="quiz-btn" style="background:var(--m5)" onclick="checkQuiz(this,5)">Valider mes réponses finales</button>
+    <div class="quiz-feedback"></div><div class="quiz-score"></div>
+  </div>
+
+  <div class="exercice">
+    <div class="ex-header"><span class="ex-badge" style="background:var(--m5)">EXERCICE FINAL</span><span class="ex-title">Séquence Genio complète — de A à Z</span></div>
+    <ul class="ex-steps">
+      <li>Ajoutez un titre d'ouverture aux couleurs Genio (#1E3A5F, #F5A623) avec l'outil Texte</li>
+      <li>Générez les sous-titres IA (Fenêtre > Transcription) si votre séquence contient de la parole</li>
+      <li>Ajoutez un fondu au noir en début et en fin de séquence</li>
+      <li>Exportez en H.264 avec le préréglage YouTube 1080p HD (Ctrl+M)</li>
+      <li>Exportez une seconde version au format Instagram Reels (1080×1920) si le contenu s'y prête</li>
+      <li>Présentez votre vidéo finale au groupe</li>
+    </ul>
+    <div class="livrable"><strong>Livrable final :</strong> Vidéo exportée complète : titre + montage + son + étalonnage + sous-titres</div>
+  </div>
+</div>
+
+<!-- SCORE TOTAL -->
+<div class="container" id="score">
+  <div class="score-total">
+    <h3>Mon score global — Formation Premiere Pro</h3>
+    <div class="score-big" id="totalScore">—</div>
+    <div class="score-sub" id="totalSub">Complétez les quiz pour voir votre score</div>
+    <button class="quiz-btn" style="background:var(--or);color:var(--marine);margin-top:1rem" onclick="calcTotal()">Calculer mon score total</button>
+  </div>
+</div>
+
+<footer>
+  <p>© 2025 <strong>Genio</strong> — Génie africain, impact global. · Formation Montage Vidéo avec Adobe Premiere Pro</p>
+  <p style="margin-top:.4rem">5 modules · Interface · Montage · Son · Effets & Couleur · Export</p>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement;
+  document.getElementById('progressBar').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+});
+const scores={};
+function checkQuiz(btn,mod){
+  const block=btn.closest('.quiz-block');
+  const items=block.querySelectorAll('.quiz-item');
+  let correct=0,total=items.length;
+  items.forEach(item=>{
+    const right=item.dataset.correct;
+    const sel=item.querySelector('input:checked');
+    item.querySelectorAll('.quiz-opt').forEach(o=>{
+      o.classList.remove('correct','wrong','reveal-correct');
+      o.style.pointerEvents='none';
+    });
+    if(sel){
+      const po=sel.closest('.quiz-opt');
+      if(sel.value===right){po.classList.add('correct');correct++;}
+      else{
+        po.classList.add('wrong');
+        item.querySelectorAll('.quiz-opt').forEach(o=>{if(o.querySelector('input').value===right)o.classList.add('reveal-correct');});
+      }
+    } else {
+      item.querySelectorAll('.quiz-opt').forEach(o=>{if(o.querySelector('input').value===right)o.classList.add('reveal-correct');});
+    }
+  });
+  scores[mod]={correct,total};
+  const fb=block.querySelector('.quiz-feedback');
+  fb.className='quiz-feedback show '+(correct===total?'ok':correct>=total/2?'ok':'ko');
+  fb.textContent=correct===total?'✅ Parfait ! Toutes les réponses sont correctes.':correct>=Math.ceil(total/2)?`👍 Bien ! ${correct}/${total} correctes. Relisez les points manqués.`:`❌ ${correct}/${total}. Reprenez le module avant de continuer.`;
+  block.querySelector('.quiz-score').textContent=`Score : ${correct} / ${total}`;
+  btn.disabled=true;btn.textContent='Réponses validées';
+  calcTotal();
+}
+function calcTotal(){
+  let tot=0,max=0;
+  Object.values(scores).forEach(s=>{tot+=s.correct;max+=s.total;});
+  if(!max)return;
+  const pct=Math.round(tot/max*100);
+  document.getElementById('totalScore').textContent=`${tot} / ${max}`;
+  document.getElementById('totalSub').textContent=`${pct}% de réussite — ${pct>=80?'🏆 Excellent ! Vous maîtrisez les bases du montage.':pct>=60?'👍 Bien ! Quelques révisions à faire.':'📚 Continuez à vous entraîner.'}`;
+}
+</script>
+</body>
+</html>

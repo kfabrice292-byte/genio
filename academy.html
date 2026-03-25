@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Genio Academy | My Learning Space</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="academy-style.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+</head>
+<body class="mobile-app">
+
+    <!-- HEADER: Current Level & XP -->
+    <header class="app-header">
+        <div class="user-info">
+            <div class="user-avatar">GF</div>
+            <div class="user-meta">
+                <span class="user-level" id="user-level-tag">NIVEAU 1 · NOVICE</span>
+                <span class="user-xp" id="user-xp-display">0 / 500 XP</span>
+            </div>
+        </div>
+        <div class="streak-badge">🔥 3 JOURS</div>
+    </header>
+
+    <!-- CONTENT AREAS -->
+    <main class="app-content">
+        <!-- Dashboard (Default) -->
+        <section id="tab-home" class="tab-view active">
+            <div class="welcome-banner">
+                <span class="label-mono">// CONTINUER L'APPRENTISSAGE</span>
+                <h1 style="font-size: 1.8rem; margin-top: 0.5rem;">Prêt pour une nouvelle <span class="text-orange">victoire</span> ?</h1>
+            </div>
+
+            <!-- Current Course Widget -->
+            <div class="course-active-card" onclick="openCourse('premiere-pro')">
+                <div class="course-img-overlay"></div>
+                <div class="course-content">
+                    <span class="badge-mini">EN COURS</span>
+                    <h3>Adobe Premiere Pro</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: 45%;"></div></div>
+                        <span class="progress-percent">45%</span>
+                    </div>
+                    <button class="btn-primary mini">REPRENDRE →</button>
+                </div>
+            </div>
+
+            <!-- Badges Section -->
+            <div class="section-header">
+                <h3>Mes Badges</h3>
+                <a href="#">Voir tout</a>
+            </div>
+            <div class="badges-row">
+                <div class="badge-item locked">🎬<span class="badge-tooltip">Master Montage</span></div>
+                <div class="badge-item active">⚡<span class="badge-tooltip">Vitesse Lumière</span></div>
+                <div class="badge-item locked">🎨<span class="badge-tooltip">Color Grad</span></div>
+                <div class="badge-item locked">🎓<span class="badge-tooltip">Diplômé</span></div>
+            </div>
+        </section>
+
+        <!-- Courses List Tab -->
+        <section id="tab-courses" class="tab-view">
+            <h2 class="view-title">Bibliothèque</h2>
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher une formation...">
+            </div>
+            <div class="course-list-grid" id="all-courses-list">
+                <!-- Courses injected here -->
+                <div class="course-item">
+                    <div class="course-thumb">👨‍💻</div>
+                    <div class="course-info">
+                        <h4>Fondamentaux Dev Web</h4>
+                        <p>12 Modules · 1200 XP</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ranking Tab -->
+        <section id="tab-ranking" class="tab-view">
+            <h2 class="view-title">Leaderboard <span class="text-orange">Top 10</span></h2>
+            <div class="leaderboard-list">
+                <div class="leader-item top">
+                    <span class="rank">1</span>
+                    <span class="name">Fabrice G.</span>
+                    <span class="points">4500 XP</span>
+                </div>
+                <div class="leader-item">
+                    <span class="rank">2</span>
+                    <span class="name">Wendemi H.</span>
+                    <span class="points">3800 XP</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-tab="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Accueil</span>
+        </button>
+        <button class="nav-btn" data-tab="courses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span>Formation</span>
+        </button>
+        <button class="nav-btn" data-tab="ranking">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+            <span>Classement</span>
+        </button>
+        <button class="nav-btn" data-tab="profile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            <span>Profil</span>
+        </button>
+    </nav>
+
+    <!-- COURSE PLAYER OVERLAY -->
+    <div id="course-player" class="player-overlay" style="display:none;">
+        <header class="player-header">
+            <button class="close-player" onclick="closePlayer()">✕</button>
+            <span id="player-title">Cours</span>
+            <div class="player-progress">
+                <div class="p-progress-bg"><div id="p-progress-fill" style="width: 10%;"></div></div>
+            </div>
+        </header>
+        <div id="player-iframe-container">
+            <!-- Loader component for modules -->
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="academy-core.js"></script>
+</body>
+</html>
